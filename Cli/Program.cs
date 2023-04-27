@@ -1,14 +1,11 @@
-﻿using Domain.Structures.Instances;
+﻿using Domain.Shareable;
+using Domain.Structures.Instances;
 
 var instance = Instance.Predefined.KroA100;
-// var search = Algorithm.SteepestLocal;
-// Shared.Random = new(42);
+Shared.Random = new(42);
 
-// var configuration = new ISearch.Configuration {
-  // Initializer = Algorithm.Random,
-  // Population = Times(2, ObservableList<Node>.Create).ToList(),
-  // Variant = "mixed"
-// };
+// var search = Algorithm.SteepestLocal;
+
 
 // var start = DateTime.Now;
 // search(instance, configuration);
