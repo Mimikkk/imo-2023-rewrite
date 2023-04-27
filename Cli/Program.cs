@@ -14,4 +14,4 @@ var configuration = Searchable.Configure with {
 
 var elapsed = MeasurementMethods.Measure(() => search(instance, configuration));
 
-Console.WriteLine($"Elapsed time: in second {elapsed.TotalSeconds:F2}");
+Console.WriteLine($"Elapsed time: in second {elapsed.TotalMilliseconds}[ms]");
