@@ -1,11 +1,6 @@
-﻿using Domain.Structures;
-using Domain.Structures.Instances;
+﻿namespace Algorithms.Searches;
 
-namespace Algorithms.Searches;
-
-public abstract class Search : ISearch {
-  public abstract IEnumerable<IEnumerable<Node>> Call(Instance instance, ISearch.Configuration configuration);
-
+public abstract class Search : Searchable {
   protected Search(
     bool usesWeight = false,
     bool usesRegret = false,

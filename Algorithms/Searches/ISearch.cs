@@ -1,24 +1,27 @@
 ﻿using System.Collections.Immutable;
-using System.Reflection.Metadata;
 using Domain.Structures;
 using Domain.Structures.Instances;
 
 namespace Algorithms.Searches;
 
-public interface ISearch {
-  public IEnumerable<IEnumerable<Node>> Call(Instance instance, Configuration configuration);
+public abstract class Searchable {
+  protected abstract IEnumerable<IEnumerable<Node>> Call(Instance instance, Configuration configuration);
 
-  public record Configuration {
-    public ISearch? Initializer = null;
+  public delegate IEnumerable<IEnumerable<Node>> Callback(Instance instance, Configuration configuration);
 
-    public float Weight;
-    public int? Start;
-    public float TimeLimit;
-    public int IterationLimit;
-    public int Regret;
-    public string Variant;
+  public static implicit operator Callback(Searchable value) => value.Call;
 
-    public readonly List<int> Gains = new();
-    public readonly ImmutableList<List<Node>> Population = null!;
-  }
+  public record struct Configuration(
+    ImmutableArray<IList<Node>> Population,
+    IList<int> Gains,
+    Searchable? Initializer = null,
+    int Regret = 0,
+    float Weight = 0,
+    int? Start = null,
+    float TimeLimit = 0,
+    int IterationLimit = 0,
+    string? Variant = null
+  );
+
+  public static readonly Configuration Configure;
 }
