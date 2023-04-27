@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Algorithms.Searches;
+using Domain.Methods;
 using Domain.Shareable;
 using Domain.Structures;
 using Domain.Structures.Instances;

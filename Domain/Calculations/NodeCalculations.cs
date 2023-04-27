@@ -1,6 +1,6 @@
 using Domain.Structures;
 
-namespace Domain.Methods;
+namespace Domain.Calculations;
 
 public static class NodeCalculations {
   [MethodImpl(MethodImplOptions.AggressiveInlining)] 

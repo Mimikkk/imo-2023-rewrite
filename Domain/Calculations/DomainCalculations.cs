@@ -1,4 +1,4 @@
-namespace Domain.Methods;
+namespace Domain.Calculations;
 
 public static class DomainCalculations {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

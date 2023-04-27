@@ -1,3 +1,4 @@
+using Domain.Calculations;
 using Domain.Methods;
 
 namespace Domain.Structures.Instances;
