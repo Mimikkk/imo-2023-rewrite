@@ -42,7 +42,6 @@ public sealed partial class Instance {
       var furthest = new int[I.Dimension, I.Dimension];
       _distances.Rows().ForEach((row, i) => {
         var j = 0;
-
         foreach (var (index, _) in row.Enumerate().OrderByDescending(x => x.value)) furthest[i, j++] = index;
       });
 

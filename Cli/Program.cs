@@ -6,11 +6,12 @@ using Domain.Structures;
 using Domain.Structures.Instances;
 
 var instance = Instance.Predefined.KroA200;
-Shared.Random = new(42);
+Shared.Random = new(0);
 
 
-var search = SearchType.Identity;
-var configuration = new Searchable.Configuration(2, instance.Dimension);
+var search = SearchType.NearestNeighbour;
+var configuration = new Searchable.Configuration(1, instance.Dimension)
+  { Initializers = new() { SearchType.Furthest } };
 
 ImmutableArray<List<Node>> cycles = new();
 var elapsed = MeasurementMethods.Measure(() => cycles = search(instance, configuration));

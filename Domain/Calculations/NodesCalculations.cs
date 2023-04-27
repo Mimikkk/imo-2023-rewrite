@@ -10,12 +10,6 @@ public static class NodesCalculations {
       nodes[(i + 1) % nodes.Count]
     ));
 
-  public static IEnumerable<(Node a, Node b)> Edges(ImmutableArray<Node> nodes) =>
-    nodes.Select((_, i) => (
-      nodes[i % nodes.Length],
-      nodes[(i + 1) % nodes.Length]
-    ));
-
   public static List<Node> Hull(ImmutableArray<Node> points) {
     var nodes = points.ToList();
     var hull = new List<Node> { nodes.MinBy(p => p.X)! };
@@ -41,8 +35,9 @@ public static class NodesCalculations {
       if (collinear.Count > 0) {
         collinear.Add(next);
 
+        var last = hull.Last();
         collinear = collinear
-          .OrderBy(n => DomainCalculations.SquareMagnitude(n.X - hull.Last().X, n.Y - hull.Last().Y))
+          .OrderBy(n => DomainCalculations.SquareMagnitude(n.X - last.X, n.Y - last.Y))
           .ToList();
 
         hull.AddRange(collinear);

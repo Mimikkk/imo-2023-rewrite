@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algorithms", "Algorithms\Al
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{6A1268A1-9CAA-4D44-94C7-217898B3EB06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualizer", "Visualizer\Visualizer.csproj", "{A6CCA20E-7908-4213-B7AA-D1410C06A9AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{6A1268A1-9CAA-4D44-94C7-217898B3EB06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1268A1-9CAA-4D44-94C7-217898B3EB06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1268A1-9CAA-4D44-94C7-217898B3EB06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6CCA20E-7908-4213-B7AA-D1410C06A9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6CCA20E-7908-4213-B7AA-D1410C06A9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6CCA20E-7908-4213-B7AA-D1410C06A9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6CCA20E-7908-4213-B7AA-D1410C06A9AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
