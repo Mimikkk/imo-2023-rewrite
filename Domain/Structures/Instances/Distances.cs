@@ -8,6 +8,8 @@ public sealed partial class Instance {
     public int this[Node a, Node b] => _distances[a.Index, b.Index];
     public int this[(Node a, Node b) edge] => this[edge.a, edge.b];
     public int this[(Node a, Node b, Node c) vertex] => this[vertex.a, vertex.b] + this[vertex.b, vertex.c];
+    public int this[IList<Node> cycle] => NodesCalculations.Edges(cycle).Sum(edge => this[edge]);
+    public int this[IEnumerable<IList<Node>> cycles] => cycles.Sum(cycle => this[cycle]);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Node Furthest(Node node) => FurthestBy(node);
