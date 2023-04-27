@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Structures.Instances;
 
 var instance = Instance.Predefined.KroA100;
 // var search = Algorithm.SteepestLocal;

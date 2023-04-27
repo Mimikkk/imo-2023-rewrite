@@ -1,4 +1,5 @@
 using Domain.Shareable;
+using Domain.Structures.Nodes;
 
 namespace Domain.Structures.Instances;
 

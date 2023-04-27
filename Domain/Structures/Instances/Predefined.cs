@@ -1,5 +1,3 @@
-using Domain.Shareable;
-
 namespace Domain.Structures.Instances;
 
 public sealed partial class Instance {
