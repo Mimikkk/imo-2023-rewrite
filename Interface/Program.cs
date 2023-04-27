@@ -1,3 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Avalonia;
 
-Console.WriteLine("Hello, World!");
+namespace Interface;
+
+public class Program {
+  static void Main(string[] args) => BuildAvaloniaApp()
+    .StartWithClassicDesktopLifetime(args);
+
+  public static AppBuilder BuildAvaloniaApp() =>
+    AppBuilder.Configure<App>()
+      .UsePlatformDetect()
+      .LogToTrace();
+}
