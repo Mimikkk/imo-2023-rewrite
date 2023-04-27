@@ -3,8 +3,6 @@ using System.Linq;
 using Algorithms.Searches;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Domain.Shareable;
-using Domain.Structures;
 using Interface.Modules;
 using Interface.Structures;
 

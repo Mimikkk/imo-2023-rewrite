@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Algorithms.Searches;
 using Domain.Calculations;
 using Domain.Extensions;
 using Domain.Structures;
 using Domain.Structures.Instances;
 using Interface.Structures;
-using static Domain.Extensions.EnumerableExtensions;
 
 namespace Interface.Modules;
 

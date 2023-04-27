@@ -1,8 +1,4 @@
 using System.Collections.Immutable;
-using Domain.Calculations;
-using Domain.Extensions;
-using Domain.Methods;
-using Domain.Shareable;
 using Domain.Structures;
 using Domain.Structures.Instances;
 
