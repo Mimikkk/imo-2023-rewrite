@@ -8,4 +8,10 @@ public static class MeasurementMethods {
 
     return end - start;
   }
+  public static TimeSpan MeasureAverage(Action action, int times = 100) {
+    var total = TimeSpan.Zero;
+    for (var i = 0; i < times; i++) total += Measure(action);
+
+    return total / times;
+  }
 }

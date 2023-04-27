@@ -5,9 +5,9 @@ using Domain.Structures.Instances;
 namespace Algorithms.Searches;
 
 public abstract class Searchable {
-  protected abstract IEnumerable<IEnumerable<Node>> Call(Instance instance, Configuration configuration);
+  protected abstract ImmutableArray<List<Node>> Call(Instance instance, Configuration configuration);
 
-  public delegate IEnumerable<IEnumerable<Node>> Callback(Instance instance, Configuration configuration);
+  public delegate ImmutableArray<List<Node>> Callback(Instance instance, Configuration configuration);
 
   public static implicit operator Callback(Searchable value) => value.Call;
 
@@ -16,7 +16,7 @@ public abstract class Searchable {
       Population = Enumerable.Range(0, size).Select(_ => new List<Node>(dimension)).ToImmutableArray();
     }
 
-    public readonly ImmutableArray<List<Node>> Population;
+    public ImmutableArray<List<Node>> Population;
     public Searchable? Initializer = null;
     public int Regret = 0;
     public float Weight = 0;
