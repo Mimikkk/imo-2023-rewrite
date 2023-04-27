@@ -3,7 +3,7 @@
 namespace Algorithms.Searches;
 
 public static class SearchType {
-  public static readonly Searchable.Callback Identity = new IdentitySearch();
-  public static readonly Searchable.Callback Furthest = new FurthestSearch();
-  public static readonly Searchable.Callback NearestNeighbour = new NearestNeighbourSearch();
+  public static readonly Search Identity = new IdentitySearch();
+  public static readonly Search Furthest = new FurthestSearch();
+  public static readonly Search NearestNeighbour = new NearestNeighbourSearch();
 }

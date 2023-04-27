@@ -20,4 +20,7 @@ public static class EnumerableExtensions {
   public static void ForEach<T>(this IEnumerable<T> enumerable, Action action) {
     foreach (var _ in enumerable) action();
   }
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static IEnumerable<T> Times<T>(int count, Func<T> action) => Enumerable.Range(0, count).Select(_ => action());
 }

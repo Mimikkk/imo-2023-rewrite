@@ -2,6 +2,7 @@
 
 public abstract class Search : Searchable {
   protected Search(
+    DisplayType? displayAs = null,
     bool usesWeight = false,
     bool usesRegret = false,
     bool usesVariants = false,
@@ -9,6 +10,7 @@ public abstract class Search : Searchable {
     bool usesInitializer = false,
     bool usesIterationLimit = false
   ) {
+    DisplayAs = displayAs;
     UsesWeight = usesWeight;
     UsesRegret = usesRegret;
     UsesVariants = usesVariants;
@@ -23,4 +25,10 @@ public abstract class Search : Searchable {
   public readonly bool UsesInitializer;
   public readonly bool UsesTimeLimit;
   public readonly bool UsesIterationLimit;
+  public readonly DisplayType? DisplayAs;
+
+  public enum DisplayType {
+    Path,
+    Cycle
+  }
 }

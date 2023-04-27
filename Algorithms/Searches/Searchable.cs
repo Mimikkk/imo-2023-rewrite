@@ -5,7 +5,7 @@ using Domain.Structures.Instances;
 namespace Algorithms.Searches;
 
 public abstract class Searchable {
-  private ImmutableArray<List<Node>> Search(Instance instance, Configuration configuration) {
+  public ImmutableArray<List<Node>> Search(Instance instance, Configuration configuration) {
     var initializers = configuration.Initializers.ToArray();
     configuration.Initializers.Clear();
     foreach (var initializer in initializers) configuration.Population = initializer(instance, configuration);
@@ -26,6 +26,8 @@ public abstract class Searchable {
 
     public ImmutableArray<List<Node>> Population;
     public List<Callback> Initializers = new();
+    public readonly List<int> Gains = new();
+    public int? Start = 0;
     public int Regret = 0;
     public float Weight = 0;
     public float TimeLimit = 0;

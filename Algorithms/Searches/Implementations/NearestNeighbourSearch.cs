@@ -60,6 +60,6 @@ public class NearestNeighbourSearch : Search {
     return population;
   }
 
-  public NearestNeighbourSearch() : base(usesInitializer: true) {
+  public NearestNeighbourSearch() : base(usesInitializer: true, displayAs: DisplayType.Path) {
   }
 }
