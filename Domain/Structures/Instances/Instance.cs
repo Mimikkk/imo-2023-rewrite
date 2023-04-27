@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using Domain.Structures.Nodes;
 
 namespace Domain.Structures.Instances;
 

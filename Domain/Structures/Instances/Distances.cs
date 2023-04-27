@@ -1,5 +1,4 @@
 using Domain.Methods;
-using Domain.Structures.Nodes;
 
 namespace Domain.Structures.Instances;
 

@@ -1,4 +1,4 @@
-using Domain.Structures.Nodes;
+using Domain.Structures;
 
 namespace Domain.Methods;
 
