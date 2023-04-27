@@ -5,5 +5,8 @@ public static class DomainCalculations {
   public static int Distance(int x, int y) => (int)MathF.Round(Magnitude(x, y));
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public static int Magnitude(int x, int y) => (int)MathF.Sqrt(x * x + y * y);
+  public static int Magnitude(int x, int y) => (int)MathF.Sqrt(SquareMagnitude(x, y));
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static int SquareMagnitude(int x, int y) => x * x + y * y;
 }

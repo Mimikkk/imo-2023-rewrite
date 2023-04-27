@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
+using Domain.Calculations;
 using Domain.Extensions;
+using Domain.Methods;
 using Domain.Shareable;
 using Domain.Structures;
 using Domain.Structures.Instances;
@@ -30,6 +32,12 @@ public class FurthestSearch : Search {
   }
 
   private static ImmutableArray<List<Node>> Multiple(Instance instance, ImmutableArray<List<Node>> population) {
+    foreach (var (cycle, node) in population.Zip(NodesCalculations.Hull(instance.Nodes)
+                 .Combinations(population.Length)
+                 .MaxBy(nodes =>
+                   NodesCalculations.Edges(nodes).Sum(edge => instance.Distance[edge]))!
+             )) cycle.Add(node);
+
     return population;
   }
 }
