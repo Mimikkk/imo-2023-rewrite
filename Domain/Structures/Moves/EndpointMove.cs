@@ -3,7 +3,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed class ClosestToEndpointMove : IMove {
+public sealed class EndpointMove : IMove {
   public void Apply() => Apply(_to, Node, ToStart);
 
   public static void Apply(NodeList to, Node node, bool toStart) {
@@ -11,7 +11,7 @@ public sealed class ClosestToEndpointMove : IMove {
     else AppendMove.Apply(to, node);
   }
 
-  public static ClosestToEndpointMove
+  public static EndpointMove
     Find(Instance instance, NodeList path, ISet<Node> used) {
     var tail = path.First();
     var head = path.Last();
@@ -25,12 +25,12 @@ public sealed class ClosestToEndpointMove : IMove {
       toHead = instance.Distance.ClosestBy(head, offset);
 
     return instance.Distance[tail, toTail] < instance.Distance[head, toHead]
-      ? new ClosestToEndpointMove(path, toTail, true)
-      : new ClosestToEndpointMove(path, toHead, false);
+      ? new EndpointMove(path, toTail, true)
+      : new EndpointMove(path, toHead, false);
   }
 
 
-  private ClosestToEndpointMove(NodeList to, Node node, bool toStart) {
+  private EndpointMove(NodeList to, Node node, bool toStart) {
     _to = to;
     Node = node;
     ToStart = toStart;
