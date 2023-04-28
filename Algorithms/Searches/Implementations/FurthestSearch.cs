@@ -21,7 +21,7 @@ public class FurthestSearch : Search {
   private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population, int? start) {
     var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
     
-    AttachMove.Apply(population[0], choice);
+    AppendMove.Apply(population[0], choice);
 
     return population;
   }
@@ -30,8 +30,8 @@ public class FurthestSearch : Search {
     var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
     var furthest = instance.Distance.Furthest(choice);
 
-    AttachMove.Apply(population[0], choice);
-    AttachMove.Apply(population[1], furthest);
+    AppendMove.Apply(population[0], choice);
+    AppendMove.Apply(population[1], furthest);
     
     return population;
   }

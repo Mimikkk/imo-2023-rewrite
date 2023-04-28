@@ -1,5 +1,5 @@
 namespace Domain.Structures.Moves;
 
-public interface Move {
+public interface IMove {
   public void Apply();
 }

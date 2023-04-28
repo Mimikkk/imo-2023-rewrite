@@ -23,7 +23,7 @@ public class RandomSearch : Search {
     while (true) {
       foreach (var path in population) {
         var choice = Shared.Random.Choose(instance.Nodes.Except(used));
-        AttachMove.Apply(path, choice);
+        AppendMove.Apply(path, choice);
 
         used.Add(choice);
         if (++counter == instance.Dimension) return population;
