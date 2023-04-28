@@ -7,6 +7,9 @@ using LanguageExt;
 namespace Algorithms.Searches.Implementations;
 
 public class NearestNeighbourSearch : Search {
+  protected override void Configure(Instance instance, Configuration configuration) =>
+    configuration.Population = SearchType.Furthest.Search(instance, configuration);
+
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
     configuration.Population.Length switch {
       _ => Multiple(instance, configuration.Population)
@@ -14,7 +17,8 @@ public class NearestNeighbourSearch : Search {
 
 
   private static void
-    FindClosestToHeadOrTailAndAppend(Instance instance, NodeList path, IDictionary<Node, int> offsets, ISet<Node> used) {
+    FindClosestToHeadOrTailAndAppend(Instance instance, NodeList path, IDictionary<Node, int> offsets,
+      ISet<Node> used) {
     var tail = path.First();
     var head = path.Last();
 

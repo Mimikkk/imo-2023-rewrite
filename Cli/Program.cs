@@ -5,16 +5,14 @@ using Domain.Shareable;
 using Domain.Structures.Instances;
 using Domain.Structures.NodeLists;
 
-var instance = Instance.Predefined.KroA200;
+var instance = Instance.Predefined.KroA100;
+var search = SearchType.Random;
 Shared.Random = new(0);
-
-
-var search = SearchType.NearestNeighbour;
 
 ImmutableArray<NodeList> cycles = new();
 var elapsed = MeasurementMethods.MeasureAverage(() => {
-  var configuration = new Searchable.Configuration(3, instance.Dimension)
-    { Initializers = new() { SearchType.Furthest } };
+  var configuration = new Searchable.Configuration(1, instance.Dimension)
+    { Initializers = new() { SearchType.Furthest }, Start = 0 };
 
   cycles = search.Search(instance, configuration);
 }, 1);

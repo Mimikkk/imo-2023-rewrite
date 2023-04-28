@@ -6,20 +6,28 @@ namespace Algorithms.Searches;
 
 public abstract class Searchable {
   public ImmutableArray<NodeList> Search(Instance instance, Configuration configuration) {
-    var initializers = configuration.Initializers.ToArray();
-    configuration.Initializers.Clear();
-    foreach (var initializer in initializers) configuration.Population = initializer(instance, configuration);
-
+    Configure(instance, configuration);
+    RunInitializers(instance, configuration);
     return Call(instance, configuration);
   }
 
+  protected virtual void Configure(Instance instance, Configuration configuration) {
+  }
+
   protected abstract ImmutableArray<NodeList> Call(Instance instance, Configuration configuration);
+
+  protected virtual void RunInitializers(Instance instance, Configuration configuration) {
+    var initializers = configuration.Initializers.ToArray();
+    configuration.Initializers.Clear();
+
+    foreach (var initializer in initializers) configuration.Population = initializer(instance, configuration);
+  }
 
   public delegate ImmutableArray<NodeList> Callback(Instance instance, Configuration configuration);
 
   public static implicit operator Callback(Searchable value) => value.Search;
 
-  public record struct Configuration {
+  public sealed record Configuration {
     public Configuration(int size, int dimension) {
       Population = Enumerable.Range(0, size).Select(_ => NodeList.Create(dimension)).ToImmutableArray();
     }

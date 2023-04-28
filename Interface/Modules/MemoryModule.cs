@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using Algorithms.Searches;
 using Domain.Shareable;
 using Domain.Structures;
 using Domain.Structures.NodeLists;
@@ -51,13 +52,16 @@ internal sealed record MemoryModule(MainWindow Self) {
       .Select(index => {
         Console.WriteLine($"Processing index: {index}");
 
-        var configuration = I.Parameter.Configuration with { Start = index };
+        var configuration = I.Parameter.Configuration with {
+          Start = index,
+          Initializers = new() { SearchType.Furthest }
+        };
         Shared.Random = new(configuration.Start ?? 999);
 
         var timer = Stopwatch.StartNew();
         var distance = I.Instance.Distance[I.Algorithm.Search(I.Instance, configuration)];
         var time = timer.ElapsedMilliseconds;
-
+        Console.WriteLine($"{index}-{distance}");
 
         return (distance, time, configuration.Gains);
       })

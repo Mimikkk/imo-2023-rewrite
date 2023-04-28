@@ -11,22 +11,22 @@ namespace Algorithms.Searches.Implementations;
 public class FurthestSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
     configuration.Population.Length switch {
-      1 => Single(instance, configuration.Population),
-      2 => Double(instance, configuration.Population),
+      1 => Single(instance, configuration.Population, configuration.Start),
+      2 => Double(instance, configuration.Population, configuration.Start),
       _ => Multiple(instance, configuration.Population)
     };
 
 
-  private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population) {
-    var choice = Shared.Random.Choose(instance.Nodes);
+  private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population, int? start) {
+    var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
     var first = population[0];
     first.Add(choice);
     first.Notify();
     return population;
   }
 
-  private static ImmutableArray<NodeList> Double(Instance instance, ImmutableArray<NodeList> population) {
-    var choice = Shared.Random.Choose(instance.Nodes);
+  private static ImmutableArray<NodeList> Double(Instance instance, ImmutableArray<NodeList> population, int? start) {
+    var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
     var first = population[0];
     var second = population[1];
 

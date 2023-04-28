@@ -160,7 +160,7 @@ public sealed partial class MainWindow : Window {
       C.Notify();
     };
     Algorithms.Items = new List<Option<Search>> {
-      new("Najbliższy sąsiad", SearchType.NearestNeighbour)
+      new("Najbliższy sąsiad", SearchType.NearestNeighbour),
       // new("Rozszerzanie cyklu", Algorithm.CycleExpansion),
       // new("Rozszerzanie cyklu z k-żalem", Algorithm.CycleExpansionWithKRegret),
       // new("Rozszerzanie cyklu z ważonym k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight),
@@ -168,7 +168,7 @@ public sealed partial class MainWindow : Window {
       // new("Strome sąsiedztwo", Algorithm.SteepestLocal),
       // new("Strome sąsiedztwo z pamięcią", Algorithm.SteepestMemory),
       // new("Strome sąsiedztwo z listą kandydatów", Algorithm.SteepestCandidates),
-      // new("Przypadkowe próbkowanie", Algorithm.Random),
+      new("Przypadkowe próbkowanie", SearchType.Random),
       // new("GRASP", Algorithm.RandomAdaptive)
     };
     Algorithms.SelectedIndex = 0;
@@ -177,7 +177,8 @@ public sealed partial class MainWindow : Window {
     ParameterVariants.SelectedIndex = 0;
 
     ParameterInitializers.Items = new List<Option<Search>> {
-      new("Przypadkowe próbkowanie", SearchType.Furthest),
+      new("Brak", SearchType.Identity),
+      new("Przypadkowe próbkowanie", SearchType.Random),
       // new("Rozszerzanie z k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight)
     };
     ParameterInitializers.SelectedIndex = 0;
@@ -209,7 +210,8 @@ public sealed partial class MainWindow : Window {
 
     var configuration = I.Parameter.Configuration with {
       Population = histories.Select(history => new NodeList(Mod.Interaction.Instance.Dimension, n => history.Add(n.ToList())))
-        .ToImmutableArray()
+        .ToImmutableArray(),
+      Initializers = new() { SearchType.Furthest }
     };
     Shared.Random = new(configuration.Start ?? 999);
     I.Algorithm.Search(I.Instance, configuration);
