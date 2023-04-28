@@ -20,7 +20,7 @@ public class FurthestSearch : Search {
 
   private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population, int? start) {
     var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
-    
+
     AppendMove.Apply(population[0], choice);
 
     return population;
@@ -32,15 +32,15 @@ public class FurthestSearch : Search {
 
     AppendMove.Apply(population[0], choice);
     AppendMove.Apply(population[1], furthest);
-    
+
     return population;
   }
 
   private static ImmutableArray<NodeList> Multiple(Instance instance, ImmutableArray<NodeList> population) {
+    // TODO: Doesnt matter. Just for fun.
     foreach (var (cycle, node) in population.Zip(NodesCalculations.Hull(instance.Nodes)
-                 .Combinations(population.Length)
-                 .MaxBy(nodes =>
-                   NodesCalculations.Edges(nodes).Sum(edge => instance.Distance[edge]))!
+               .Combinations(population.Length)
+               .MaxBy(nodes => instance.Distance[nodes])
              )) {
       cycle.Add(node);
       cycle.Notify();

@@ -5,11 +5,15 @@ using Domain.Structures.NodeLists;
 namespace Domain.Calculations;
 
 public static class NodesCalculations {
-  public static IEnumerable<(Node a, Node b)> Edges(IList<Node> nodes) =>
-    nodes.Select((_, i) => (
-      nodes[i % nodes.Count],
-      nodes[(i + 1) % nodes.Count]
-    ));
+  public static IEnumerable<((Node a, Node b) vertices, (int i, int j) indices)> Edges(IList<Node> nodes) {
+    var length = nodes.Count;
+    for (var i = 0; i < length; i++) {
+      var j = (i + 1) % length;
+      var a = nodes[i];
+      var b = nodes[j];
+      yield return ((a, b), (i, j));
+    }
+  }
 
   public static NodeList Hull(ImmutableArray<Node> points) {
     var nodes = points.ToList();
