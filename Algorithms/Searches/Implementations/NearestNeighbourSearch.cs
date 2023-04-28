@@ -21,26 +21,26 @@ public class NearestNeighbourSearch : Search {
       var head = path.First();
       var tail = path.Last();
 
-      Node closestToHead;
+      Node toHead;
       var offset = 0;
       while (true) {
-        closestToHead = instance.Distance.ClosestBy(head, offset++);
-        if (!path.Contains(closestToHead)) break;
+        toHead = instance.Distance.ClosestBy(head, offset++);
+        if (!path.Contains(toHead)) break;
       }
 
       offset = 0;
-      Node closestToTail;
+      Node toTail;
       while (true) {
-        closestToTail = instance.Distance.ClosestBy(tail, offset++);
-        if (!path.Contains(closestToTail)) break;
+        toTail = instance.Distance.ClosestBy(tail, offset++);
+        if (!path.Contains(toTail)) break;
       }
 
-      if (instance.Distance[head, closestToHead] < instance.Distance[tail, closestToTail]) {
-        path.Insert(0, closestToHead);
-      }
-      else {
-        path.Add(closestToTail);
-      }
+      if (instance.Distance[head, toHead] < instance.Distance[tail, toTail])
+        path.Insert(0, toHead);
+      else
+        path.Add(toTail);
+
+      path.Notify();
     }
 
     return population;
@@ -54,6 +54,6 @@ public class NearestNeighbourSearch : Search {
     return population;
   }
 
-  public NearestNeighbourSearch() : base(usesInitializer: true, displayAs: DisplayType.Path) {
+  public NearestNeighbourSearch() : base(displayAs: DisplayType.Path) {
   }
 }

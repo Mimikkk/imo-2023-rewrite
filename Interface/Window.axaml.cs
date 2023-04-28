@@ -5,6 +5,7 @@ using Algorithms.Searches;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Domain.Shareable;
+using Domain.Structures;
 using static Domain.Extensions.EnumerableExtensions;
 using Domain.Structures.NodeLists;
 using Interface.Modules;
@@ -176,7 +177,7 @@ public sealed partial class MainWindow : Window {
     ParameterVariants.SelectedIndex = 0;
 
     ParameterInitializers.Items = new List<Option<Search>> {
-      // new("Przypadkowe próbkowanie", Algorithm.Random),
+      new("Przypadkowe próbkowanie", SearchType.Furthest),
       // new("Rozszerzanie z k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight)
     };
     ParameterInitializers.SelectedIndex = 0;
@@ -203,11 +204,11 @@ public sealed partial class MainWindow : Window {
     M.Histories.Clear();
 
     var histories =
-      Times(I.Parameter.PopulationSize, () => new List<NodeList> { new(Mod.Interaction.Instance.Dimension) })
+      Times(I.Parameter.PopulationSize, () => new List<List<Node>> { new(Mod.Interaction.Instance.Dimension) })
         .ToImmutableArray();
 
     var configuration = I.Parameter.Configuration with {
-      Population = histories.Select(history => new NodeList(Mod.Interaction.Instance.Dimension, history.Add))
+      Population = histories.Select(history => new NodeList(Mod.Interaction.Instance.Dimension, n => history.Add(n.ToList())))
         .ToImmutableArray()
     };
     Shared.Random = new(configuration.Start ?? 999);

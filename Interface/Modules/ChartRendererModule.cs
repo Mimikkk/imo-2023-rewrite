@@ -3,6 +3,7 @@ using System.Linq;
 using Algorithms.Searches;
 using Charts.Extensions;
 using Domain.Extensions;
+using Domain.Structures;
 using Domain.Structures.NodeLists;
 using ScottPlot;
 using SkiaSharp;
@@ -19,8 +20,8 @@ internal sealed record ChartRendererModule {
   public ChartRendererModule(MainWindow window) {
     Self = window;
     Updates = new() {
-      () => Add.Scatter(I.Instance.Nodes.ToList()),
-      () => M.Histories.ToList().ForEach(Render),
+      () => Add.Scatter(I.Instance.Nodes),
+      () => M.Histories.ForEach(Render),
       () => (P.Cycles.Count > 0).And(() => P.Cycles.ForEach(cycle => Add.Cycle(cycle, I.Instance))),
       () => Mouse.Closest.Let(Add.Point),
       () => {
@@ -59,13 +60,13 @@ internal sealed record ChartRendererModule {
     };
   }
 
-  private void Render(IEnumerable<NodeList> history) {
-    var enumerable = history as NodeList[] ?? history.ToArray();
+  private void Render(IEnumerable<List<Node>> history) {
+    var enumerable = history as List<Node>[] ?? history.ToArray();
     var step = enumerable.ElementAtOrDefault(I.Step) ?? enumerable[^1];
     Render(step);
   }
 
-  private void Render(NodeList cycle) {
+  private void Render(IEnumerable<Node> cycle) {
     switch (I.Algorithm.DisplayAs) {
       case Search.DisplayType.Cycle: {
         Add.Cycle(cycle, I.Instance);
