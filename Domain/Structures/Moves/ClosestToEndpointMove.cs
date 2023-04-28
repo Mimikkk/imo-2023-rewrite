@@ -3,7 +3,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public class ClosestToEndpointMove : IMove {
+public sealed class ClosestToEndpointMove : IMove {
   public void Apply() => Apply(_to, Node, ToStart);
 
   public static void Apply(NodeList to, Node node, bool toStart) {
