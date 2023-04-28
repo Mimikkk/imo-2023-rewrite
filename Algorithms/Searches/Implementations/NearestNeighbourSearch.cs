@@ -19,8 +19,7 @@ public class NearestNeighbourSearch : Search {
 
     var counter = used.Count;
     while (true) {
-      foreach (var path in population) {
-        var move = EndpointMove.Find(instance, path, used);
+      foreach (var move in population.Select(path => EndpointMove.Find(instance, path, used))) {
         move.Apply();
         used.Add(move.Node);
         if (++counter == instance.Dimension) return population;

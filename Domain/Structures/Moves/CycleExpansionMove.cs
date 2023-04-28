@@ -12,12 +12,16 @@ public sealed record CycleExpansionMove(NodeList To, Node Node, int At) : IMove 
     Find(Instance instance, NodeList cycle, IEnumerable<Node> except) {
     var nodes = instance.Nodes.Except(except).ToArray();
 
-    var (node, at, _) =
+    return From(
+      cycle,
       NodesCalculations.Edges(cycle)
-        .SelectMany(edge => nodes.Select(node =>
-          (node: edge.vertices.b, at: edge.indices.j, gain: instance.Gain.Insert(edge.vertices, node)))
-        ).MaxBy(candidate => candidate.gain);
-
-    return new CycleExpansionMove(cycle, node, at);
+        .SelectMany(e => nodes.Select(n =>
+          (node: n, at: e.indices.j, gain: instance.Gain.Insert(e.vertices, n)))
+        ).MinBy(candidate => candidate.gain)
+    );
   }
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  private static CycleExpansionMove From(NodeList cycle, (Node node, int at, int gain) candidate) =>
+    new(cycle, candidate.node, candidate.at);
 }
