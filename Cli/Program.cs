@@ -1,21 +1,19 @@
-﻿using System.Collections.Immutable;
-using Algorithms.Searches;
-using Domain.Methods;
+﻿using Algorithms.Searches;
 using Domain.Shareable;
 using Domain.Structures.Instances;
-using Domain.Structures.NodeLists;
 
 var instance = Instance.Predefined.KroA100;
-var search = SearchType.Random;
+var search = SearchType.CycleExpansion;
 Shared.Random = new(0);
 
-ImmutableArray<NodeList> cycles = new();
-var elapsed = MeasurementMethods.MeasureAverage(() => {
-  var configuration = new Searchable.Configuration(1, instance.Dimension)
-    { Initializers = new() { SearchType.Furthest }, Start = 0 };
+var configuration = new Searchable.Configuration(1, instance.Dimension)
+  { Start = 0 };
 
-  cycles = search.Search(instance, configuration);
-}, 1);
 
-Console.WriteLine($"Elapsed time: in second {elapsed.TotalMilliseconds}[ms]");
+var start = DateTime.Now;
+var cycles = search.Search(instance, configuration);
+var end = DateTime.Now;
+var elapsed = end - start;
+
+Console.WriteLine($"Elapsed time: in second {elapsed.TotalMilliseconds:F2}[ms]");
 Console.WriteLine($"Length: {instance.Distance[cycles]}");
