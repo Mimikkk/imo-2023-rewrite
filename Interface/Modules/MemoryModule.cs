@@ -2,10 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using Algorithms.Searches;
 using Domain.Shareable;
 using Domain.Structures;
-using Domain.Structures.NodeLists;
 using ScottPlot;
 using ScottPlot.Palettes;
 

@@ -1,11 +1,9 @@
 using System.Collections.Immutable;
 using Domain.Extensions;
 using Domain.Shareable;
-using Domain.Structures;
 using Domain.Structures.Instances;
 using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
-using LanguageExt;
 
 namespace Algorithms.Searches.Implementations;
 
