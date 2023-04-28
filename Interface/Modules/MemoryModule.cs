@@ -52,10 +52,7 @@ internal sealed record MemoryModule(MainWindow Self) {
       .Select(index => {
         Console.WriteLine($"Processing index: {index}");
 
-        var configuration = I.Parameter.Configuration with {
-          Start = index,
-          Initializers = new() { SearchType.Furthest }
-        };
+        var configuration = I.Parameter.Configuration with { Start = index };
         Shared.Random = new(configuration.Start ?? 999);
 
         var timer = Stopwatch.StartNew();

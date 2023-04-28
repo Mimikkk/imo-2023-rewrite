@@ -3,6 +3,7 @@ using Domain.Extensions;
 using Domain.Shareable;
 using Domain.Structures;
 using Domain.Structures.Instances;
+using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
 using LanguageExt;
 
@@ -22,9 +23,9 @@ public class RandomSearch : Search {
     while (true) {
       foreach (var path in population) {
         var choice = Shared.Random.Choose(instance.Nodes.Except(used));
-        path.Add(choice);
+        AttachMove.Apply(path, choice);
+
         used.Add(choice);
-        path.Notify();
         if (++counter == instance.Dimension) return population;
       }
     }

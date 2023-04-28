@@ -4,6 +4,7 @@ using Domain.Extensions;
 using Domain.Methods;
 using Domain.Shareable;
 using Domain.Structures.Instances;
+using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
 
 namespace Algorithms.Searches.Implementations;
@@ -19,24 +20,19 @@ public class FurthestSearch : Search {
 
   private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population, int? start) {
     var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
-    var first = population[0];
-    first.Add(choice);
-    first.Notify();
+    
+    AttachMove.Apply(population[0], choice);
+
     return population;
   }
 
   private static ImmutableArray<NodeList> Double(Instance instance, ImmutableArray<NodeList> population, int? start) {
     var choice = start is null ? Shared.Random.Choose(instance.Nodes) : instance.Nodes[start.Value];
-    var first = population[0];
-    var second = population[1];
+    var furthest = instance.Distance.Furthest(choice);
 
-    first.Add(choice);
-    first.Notify();
-
-    choice = instance.Distance.Furthest(choice);
-    second.Add(choice);
-    second.Notify();
-
+    AttachMove.Apply(population[0], choice);
+    AttachMove.Apply(population[1], furthest);
+    
     return population;
   }
 

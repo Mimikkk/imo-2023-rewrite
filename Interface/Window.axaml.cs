@@ -209,9 +209,9 @@ public sealed partial class MainWindow : Window {
         .ToImmutableArray();
 
     var configuration = I.Parameter.Configuration with {
-      Population = histories.Select(history => new NodeList(Mod.Interaction.Instance.Dimension, n => history.Add(n.ToList())))
+      Population = histories
+        .Select(history => new NodeList(Mod.Interaction.Instance.Dimension, n => history.Add(n.ToList())))
         .ToImmutableArray(),
-      Initializers = new() { SearchType.Furthest }
     };
     Shared.Random = new(configuration.Start ?? 999);
     I.Algorithm.Search(I.Instance, configuration);
