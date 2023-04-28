@@ -17,14 +17,14 @@ public class NearestNeighbourSearch : Search {
     };
 
   private static ImmutableArray<NodeList> Multiple(Instance instance, ImmutableArray<NodeList> population) {
-    var offsets = instance.Nodes.ToDictionary(e => e, _ => 0);
     var used = population.Flatten().ToHashSet();
 
     var counter = used.Count;
     while (true) {
       foreach (var path in population) {
-        var move = ClosestToEndpointMove.Find(instance, path, offsets, used);
+        var move = ClosestToEndpointMove.Find(instance, path, used);
         move.Apply();
+        used.Add(move.Node);
         if (++counter == instance.Dimension) return population;
       }
     }

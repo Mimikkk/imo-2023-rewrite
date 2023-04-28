@@ -12,39 +12,31 @@ public class ClosestToEndpointMove : IMove {
   }
 
   public static ClosestToEndpointMove
-    Find(Instance instance, NodeList path, IDictionary<Node, int> offsets, ISet<Node> used) {
+    Find(Instance instance, NodeList path, ISet<Node> used) {
     var tail = path.First();
     var head = path.Last();
 
-    Node toTail;
-    var offsetTail = 0;
-    while (true) {
-      toTail = instance.Distance.ClosestBy(tail, offsetTail++);
-      if (!used.Contains(toTail)) break;
-    }
+    var toTail = instance.Distance.Closest(tail);
+    for (var offset = 1; used.Contains(toTail); ++offset)
+      toTail = instance.Distance.ClosestBy(tail, offset);
 
-    var offsetHead = 0;
-    Node toHead;
-    while (true) {
-      toHead = instance.Distance.ClosestBy(head, offsetHead++);
-      if (!used.Contains(toHead)) break;
-    }
+    var toHead = instance.Distance.Closest(head);
+    for (var offset = 1; used.Contains(toHead); ++offset)
+      toHead = instance.Distance.ClosestBy(head, offset);
 
     return instance.Distance[tail, toTail] < instance.Distance[head, toHead]
-      ? new ClosestToEndpointMove(path, toTail, --offsetTail, true)
-      : new ClosestToEndpointMove(path, toHead, --offsetTail, false);
+      ? new ClosestToEndpointMove(path, toTail, true)
+      : new ClosestToEndpointMove(path, toHead, false);
   }
 
 
-  private ClosestToEndpointMove(NodeList to, Node node, int closestOffset, bool toStart) {
+  private ClosestToEndpointMove(NodeList to, Node node, bool toStart) {
     _to = to;
     Node = node;
     ToStart = toStart;
-    ClosestOffset = closestOffset;
   }
 
   public readonly Node Node;
   public readonly bool ToStart;
-  public readonly int ClosestOffset;
   private readonly NodeList _to;
 }
