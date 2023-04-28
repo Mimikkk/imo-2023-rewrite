@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Charts.Extensions;
 using Domain.Extensions;
 using Domain.Structures;
+using Domain.Structures.NodeLists;
 using ScottPlot.Control;
 
 namespace Interface.Modules;
@@ -34,7 +34,7 @@ internal sealed record MouseModule(MainWindow Self) {
   }
 
   public Node? Closest { get; private set; }
-  public readonly List<Node> Selection = new();
+  public readonly NodeList Selection = new(200);
 
   private InteractionModule I => Self.Mod.Interaction;
   private Interaction CI => Self.Chart.Interaction;

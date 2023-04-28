@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Algorithms.Searches;
+﻿using Algorithms.Searches;
 using Domain.Calculations;
 using Domain.Extensions;
-using Domain.Structures;
 using Domain.Structures.Instances;
+using Domain.Structures.NodeLists;
 using Interface.Structures;
 
 namespace Interface.Modules;
@@ -18,7 +17,7 @@ internal sealed record InteractionModule(MainWindow Self) {
     }
   }
 
-  public IEnumerable<Node> Hull => _hull ??= NodesCalculations.Hull(Instance.Nodes);
+  public NodeList Hull => _hull ??= NodesCalculations.Hull(Instance.Nodes);
 
   public Search Algorithm => Self.Algorithms.SelectedItem.As<Option<Search>>().Value;
   public int Step => (int)Self.HistorySlider.Value;
@@ -49,6 +48,6 @@ internal sealed record InteractionModule(MainWindow Self) {
   public readonly Parameters Parameter = new(Self);
 
   private static Instance? _instance;
-  private IEnumerable<Node>? _hull;
+  private NodeList? _hull;
   private string InstanceSelection => Self.Instances.SelectedItem.As<Option<string>>().Value;
 }

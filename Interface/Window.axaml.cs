@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Algorithms.Searches;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Domain.Shareable;
+using static Domain.Extensions.EnumerableExtensions;
+using Domain.Structures.NodeLists;
 using Interface.Modules;
 using Interface.Structures;
 
@@ -198,17 +202,20 @@ public sealed partial class MainWindow : Window {
   public void HandleRunCommand() {
     M.Histories.Clear();
 
-    // var histories = Times(I.Parameter.PopulationSize, () => new List<List<Node>> { new() }).ToList();
+    var histories =
+      Times(I.Parameter.PopulationSize, () => new List<NodeList> { new(Mod.Interaction.Instance.Dimension) })
+        .ToImmutableArray();
 
-    // var configuration = I.Parameter.Configuration with {
-    // Population = histories.Select(history => new ObservableList<Node>(items => history.Add(items.ToList()))).ToList()
-    // };
-    // Shared.Random = new(configuration.Start ?? 999);
-    // I.Algorithm.Search(I.Instance, configuration);
+    var configuration = I.Parameter.Configuration with {
+      Population = histories.Select(history => new NodeList(Mod.Interaction.Instance.Dimension, history.Add))
+        .ToImmutableArray()
+    };
+    Shared.Random = new(configuration.Start ?? 999);
+    I.Algorithm.Search(I.Instance, configuration);
 
-    // histories.ForEach(M.Histories.Add);
-    // HistorySlider.Maximum = histories.MaxBy(x => x.Count)!.Count - 1;
-    // HistorySlider.Value = HistorySlider.Maximum;
+    histories.ForEach(h => M.Histories.Add(h));
+    HistorySlider.Maximum = histories.MaxBy(x => x.Count)!.Count - 1;
+    HistorySlider.Value = HistorySlider.Maximum;
   }
 
   internal readonly Modules.Modules Mod;

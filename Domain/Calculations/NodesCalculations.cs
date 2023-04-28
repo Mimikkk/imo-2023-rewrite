@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Domain.Structures;
+using Domain.Structures.NodeLists;
 
 namespace Domain.Calculations;
 
@@ -10,9 +11,9 @@ public static class NodesCalculations {
       nodes[(i + 1) % nodes.Count]
     ));
 
-  public static List<Node> Hull(ImmutableArray<Node> points) {
+  public static NodeList Hull(ImmutableArray<Node> points) {
     var nodes = points.ToList();
-    var hull = new List<Node> { nodes.MinBy(p => p.X)! };
+    var hull = new NodeList(points.Length) { nodes.MinBy(p => p.X)! };
     nodes.Remove(hull.First());
 
     var (collinear, counter) = (new List<Node>(), 0);
@@ -40,7 +41,7 @@ public static class NodesCalculations {
           .OrderBy(n => DomainCalculations.SquareMagnitude(n.X - last.X, n.Y - last.Y))
           .ToList();
 
-        hull.AddRange(collinear);
+        collinear.ForEach(hull.Add);
         nodes.RemoveAll(collinear.Contains);
         collinear.Clear();
         continue;

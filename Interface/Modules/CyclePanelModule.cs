@@ -2,7 +2,7 @@
 using System.Linq;
 using Charts.Extensions;
 using Domain.Extensions;
-using Domain.Structures;
+using Domain.Structures.NodeLists;
 using Interface.Structures;
 using ScottPlot;
 
@@ -50,7 +50,7 @@ internal sealed record CyclePanelModule {
         var options = new List<Option<Action>>()
           .AddWhen(new(
             "Utwórz",
-            () => Cycles.Add(selection.ToList())
+            () => Cycles.Add(selection)
           ), selection.Count > 2 && !partiallySelected.Any())
           .AddWhen(new(
               "Dodaj Wierzchołek",
@@ -122,5 +122,5 @@ internal sealed record CyclePanelModule {
   private MemoryModule M => Self.Mod.Memory;
   private MouseModule Mouse => Self.Mod.Mouse;
   public void Subscribe(Action update) => Updates.Add(update);
-  public readonly List<List<Node>> Cycles = new();
+  public readonly List<NodeList> Cycles = new();
 }

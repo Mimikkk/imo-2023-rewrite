@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Domain.Shareable;
-using Domain.Structures;
+using Domain.Structures.NodeLists;
 using ScottPlot;
 using ScottPlot.Palettes;
 
@@ -77,6 +77,6 @@ internal sealed record MemoryModule(MainWindow Self) {
   }
 
   public readonly IPalette Palette = new Category10();
-  public readonly ObservableCollection<List<List<Node>>> Histories = new();
+  public readonly ObservableCollection<List<NodeList>> Histories = new();
   private InteractionModule I => Self.Mod.Interaction;
 }

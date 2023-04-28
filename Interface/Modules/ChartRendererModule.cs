@@ -3,7 +3,7 @@ using System.Linq;
 using Algorithms.Searches;
 using Charts.Extensions;
 using Domain.Extensions;
-using Domain.Structures;
+using Domain.Structures.NodeLists;
 using ScottPlot;
 using SkiaSharp;
 
@@ -19,7 +19,7 @@ internal sealed record ChartRendererModule {
   public ChartRendererModule(MainWindow window) {
     Self = window;
     Updates = new() {
-      () => Add.Scatter(I.Instance.Nodes),
+      () => Add.Scatter(I.Instance.Nodes.ToList()),
       () => M.Histories.ToList().ForEach(Render),
       () => (P.Cycles.Count > 0).And(() => P.Cycles.ForEach(cycle => Add.Cycle(cycle, I.Instance))),
       () => Mouse.Closest.Let(Add.Point),
@@ -28,12 +28,12 @@ internal sealed record ChartRendererModule {
         Add.Point(Mouse.Selection.First(), SKColors.Coral);
 
         var color = Self.Chart.Plot.Plottables.Count;
-        var plotted = new List<Node>();
+        var plotted = NodeList.Create(I.Instance.Dimension);
 
         foreach (var history in M.Histories.Where(history => history.Count > I.Step)) {
           var nodes = history[I.Step].Except(new[] { Mouse.Selection.First() }).ToList();
 
-          plotted.AddRange(nodes);
+          nodes.ForEach(plotted.Add);
           Add.Distance(Mouse.Selection.First(), nodes, M.Palette.GetColor(++color).ToSKColor());
         }
 
@@ -59,13 +59,13 @@ internal sealed record ChartRendererModule {
     };
   }
 
-  private void Render(IEnumerable<IEnumerable<Node>> history) {
-    var enumerable = history as IEnumerable<Node>[] ?? history.ToArray();
+  private void Render(IEnumerable<NodeList> history) {
+    var enumerable = history as NodeList[] ?? history.ToArray();
     var step = enumerable.ElementAtOrDefault(I.Step) ?? enumerable[^1];
     Render(step);
   }
 
-  private void Render(IEnumerable<Node> cycle) {
+  private void Render(NodeList cycle) {
     switch (I.Algorithm.DisplayAs) {
       case Search.DisplayType.Cycle: {
         Add.Cycle(cycle, I.Instance);

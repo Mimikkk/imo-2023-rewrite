@@ -1,11 +1,11 @@
 ﻿using System.Collections.Immutable;
-using Domain.Structures;
 using Domain.Structures.Instances;
+using Domain.Structures.NodeLists;
 
 namespace Algorithms.Searches;
 
 public abstract class Searchable {
-  public ImmutableArray<List<Node>> Search(Instance instance, Configuration configuration) {
+  public ImmutableArray<NodeList> Search(Instance instance, Configuration configuration) {
     var initializers = configuration.Initializers.ToArray();
     configuration.Initializers.Clear();
     foreach (var initializer in initializers) configuration.Population = initializer(instance, configuration);
@@ -13,18 +13,18 @@ public abstract class Searchable {
     return Call(instance, configuration);
   }
 
-  protected abstract ImmutableArray<List<Node>> Call(Instance instance, Configuration configuration);
+  protected abstract ImmutableArray<NodeList> Call(Instance instance, Configuration configuration);
 
-  public delegate ImmutableArray<List<Node>> Callback(Instance instance, Configuration configuration);
+  public delegate ImmutableArray<NodeList> Callback(Instance instance, Configuration configuration);
 
   public static implicit operator Callback(Searchable value) => value.Search;
 
   public record struct Configuration {
     public Configuration(int size, int dimension) {
-      Population = Enumerable.Range(0, size).Select(_ => new List<Node>(dimension)).ToImmutableArray();
+      Population = Enumerable.Range(0, size).Select(_ => NodeList.Create(dimension)).ToImmutableArray();
     }
 
-    public ImmutableArray<List<Node>> Population;
+    public ImmutableArray<NodeList> Population;
     public List<Callback> Initializers = new();
     public readonly List<int> Gains = new();
     public int? Start = 0;
