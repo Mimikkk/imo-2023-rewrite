@@ -10,11 +10,14 @@ Shared.Random = new(0);
 
 
 var search = SearchType.NearestNeighbour;
-var configuration = new Searchable.Configuration(1, instance.Dimension)
-  { Initializers = new() { SearchType.Furthest } };
 
 ImmutableArray<NodeList> cycles = new();
-var elapsed = MeasurementMethods.Measure(() => cycles = search.Search(instance, configuration));
+var elapsed = MeasurementMethods.MeasureAverage(() => {
+  var configuration = new Searchable.Configuration(3, instance.Dimension)
+    { Initializers = new() { SearchType.Furthest } };
+
+  cycles = search.Search(instance, configuration);
+}, 1);
 
 Console.WriteLine($"Elapsed time: in second {elapsed.TotalMilliseconds}[ms]");
 Console.WriteLine($"Length: {instance.Distance[cycles]}");

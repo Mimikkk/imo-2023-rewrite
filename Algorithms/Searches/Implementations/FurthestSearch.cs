@@ -19,15 +19,24 @@ public class FurthestSearch : Search {
 
   private static ImmutableArray<NodeList> Single(Instance instance, ImmutableArray<NodeList> population) {
     var choice = Shared.Random.Choose(instance.Nodes);
-    population.First().Add(choice);
+    var first = population[0];
+    first.Add(choice);
+    first.Notify();
     return population;
   }
 
   private static ImmutableArray<NodeList> Double(Instance instance, ImmutableArray<NodeList> population) {
     var choice = Shared.Random.Choose(instance.Nodes);
-    population.First().Add(choice);
+    var first = population[0];
+    var second = population[1];
+
+    first.Add(choice);
+    first.Notify();
+
     choice = instance.Distance.Furthest(choice);
-    population.Last().Add(choice);
+    second.Add(choice);
+    second.Notify();
+
     return population;
   }
 
@@ -36,7 +45,10 @@ public class FurthestSearch : Search {
                  .Combinations(population.Length)
                  .MaxBy(nodes =>
                    NodesCalculations.Edges(nodes).Sum(edge => instance.Distance[edge]))!
-             )) cycle.Add(node);
+             )) {
+      cycle.Add(node);
+      cycle.Notify();
+    }
 
     return population;
   }
