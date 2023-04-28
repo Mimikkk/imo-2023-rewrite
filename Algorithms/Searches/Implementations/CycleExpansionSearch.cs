@@ -15,13 +15,13 @@ public class CycleExpansionSearch : Search {
     };
 
   private static ImmutableArray<NodeList> Multiple(Instance instance, ImmutableArray<NodeList> population) {
-    var used = population.Flatten().ToHashSet();
+    var usable = instance.Nodes.Except(population.Flatten()).ToHashSet();
 
-    var counter = used.Count;
+    var counter = instance.Dimension - usable.Count;
     while (true) {
-      foreach (var move in population.Select(path => CycleExpansionMove.Find(instance, path, used))) {
+      foreach (var move in population.Select(path => CycleExpansionMove.Find(instance, path, usable))) {
         move.Apply();
-        used.Add(move.Node);
+        usable.Remove(move.Node);
         if (++counter == instance.Dimension) return population;
       }
     }
