@@ -6,6 +6,9 @@ namespace Algorithms.Searches;
 
 public abstract class Searchable {
   public ImmutableArray<NodeList> Search(Instance instance, Configuration configuration) {
+    configuration = configuration with {
+      Population = configuration.Population.ToImmutableArray()
+    };
     Configure(instance, configuration);
     RunInitializers(instance, configuration);
     return Call(instance, configuration);
