@@ -7,7 +7,7 @@ var search = SearchType.RegretCycleExpansion;
 Shared.Random = new(0);
 
 var configuration = new Searchable.Configuration(1, instance.Dimension)
-  { Start = 0, Regret = 5 };
+  { Start = 0, Regret = 2 };
 
 
 var start = DateTime.Now;
