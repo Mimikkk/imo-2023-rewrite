@@ -6,10 +6,11 @@ public sealed record ExchangeExternalVerticesMove(NodeList First, NodeList Secon
   public void Apply() => Apply(First, Second, From, To);
 
   public static void Apply(NodeList first, NodeList second, int from, int to) {
-    first.RemoveAt(from);
-    first.Insert(from, second[to]);
-    second.RemoveAt(to);
-    second.Insert(to, first[from]);
+    var a = first.Pop(from);
+    var b = second.Pop(to);
+    
+    first.Insert(from, b);
+    second.Insert(to, a);
 
     first.Notify();
     second.Notify();

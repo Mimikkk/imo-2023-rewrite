@@ -1,3 +1,4 @@
+using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Instances;
@@ -24,7 +25,7 @@ public sealed partial class Instance {
     }
 
     public int ExchangeVertices(NodeList first, NodeList second, int exchange, int with) =>
-      ReplaceVertex(first, exchange, with) + ReplaceVertex(second, with, exchange);
+      ReplaceVertex(first, exchange, second[with]) + ReplaceVertex(second, with, first[exchange]);
 
     public int ExchangeVertices(NodeList cycle, int i, int j) {
       if (i > j) (i, j) = (j, i);
@@ -41,10 +42,10 @@ public sealed partial class Instance {
       return D[(a, b, c)] + D[(d, e, f)] - D[(a, e, c)] - D[(d, b, f)];
     }
 
-    public int ReplaceVertex(NodeList cycle, int a, int b) {
-      var va = cycle.NeighNodes(a);
+    public int ReplaceVertex(NodeList cycle, int i, Node b) {
+      var va = cycle.NeighNodes(i);
 
-      return D[va] - D[va with { b = cycle[b] }];
+      return D[va] - D[va with { b = b }];
     }
 
     private readonly Distances D;

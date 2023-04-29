@@ -52,11 +52,11 @@ internal sealed record ChartRendererModule {
       // () => M.AverageGain.Let(value => Add.Label($"Przeciętny zysk w długości: {value:F2}")),
       // () => M.WorstGain.Let(value => Add.Label($"Najgorszy zysk w długości: {value:F2}")),
       // () => M.BestGain.Let(value => Add.Label($"Najlepszy zysk w długości: {value:F2}")),
-      // () => (I.Parameter.PopulationSize > 1).And(() =>
-      // Add.Label($"Łączna długość: {
-      // M.Histories.Sum(history =>
-      // I.Instance[history.ElementAtOrDefault(I.Step) ?? history[^1]])
-      // }"))
+      () => (I.Parameter.PopulationSize > 1).And(() =>
+        Add.Label($"Łączna długość: {
+          M.Histories.Sum(history =>
+            I.Instance.Distance[history.ElementAtOrDefault(I.Step) ?? history[^1]])
+        }"))
     };
   }
 

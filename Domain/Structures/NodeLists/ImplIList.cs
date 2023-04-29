@@ -35,8 +35,8 @@ public sealed partial class NodeList : IList<Node> {
   }
 
   public void RemoveAt(int index) {
-    _list.RemoveAt(index);
     _used[_list[index].Index] = false;
+    _list.RemoveAt(index);
   }
 
   public Node this[int index] {

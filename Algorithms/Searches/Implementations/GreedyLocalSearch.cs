@@ -37,17 +37,15 @@ public class GreedyLocalSearch : Search {
 
   private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population,
     IList<Variant> moves) {
-    var i = 0;
 
     while (true) {
-      if (i++ > 1000) return population;
       var (move, gain) = moves.SelectMany(m => m.Find(instance, population))
         .Shuffle()
         .FirstOrDefault(c => c.gain > 0);
 
       if (gain is 0) return population;
-
       move.Apply();
+      population.ForEach(p => p.Notify());
     }
   }
 
