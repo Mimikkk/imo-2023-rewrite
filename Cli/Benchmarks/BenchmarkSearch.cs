@@ -24,7 +24,7 @@ public class BenchmarkSearch {
     }
   }
 
-  private readonly Search _search = SearchType.WeightedRegretCycleExpansion;
+  private readonly Search _search = SearchType.GreedyLocal;
   private Searchable.Configuration _configuration = null!;
 
   private int _iteration;
@@ -32,12 +32,15 @@ public class BenchmarkSearch {
 
   [IterationSetup]
   public void Setup() {
-    _configuration = new(2, Instance.Dimension) {
-      Start = _iteration < IterationOffset ? null : _iteration - IterationOffset,
-      Regret = 2,
-      Weight = 0.38f
-    };
+    var offset = _iteration - IterationOffset;
+
     Shared.Random = new(_iteration++);
+    _configuration = new(1, Instance.Dimension) {
+      Start = offset < 0 ? null : offset,
+      Regret = 2,
+      Weight = 0.38f,
+      Initializers = new() { SearchType.WeightedRegretCycleExpansion }
+    };
   }
 
   [Benchmark]
