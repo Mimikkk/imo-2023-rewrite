@@ -3,8 +3,8 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed class EndpointMove : IMove {
-  public void Apply() => Apply(_to, Node, ToStart);
+public sealed record EndpointMove(NodeList To, Node Node, bool ToStart, int Gain) : IMove {
+  public void Apply() => Apply(To, Node, ToStart);
 
   public static void Apply(NodeList to, Node node, bool toStart) {
     if (toStart) InsertMove.Apply(to, node, 0);
@@ -24,19 +24,14 @@ public sealed class EndpointMove : IMove {
     for (var offset = 1; used.Contains(toHead); ++offset)
       toHead = instance.Distance.ClosestBy(head, offset);
 
-    return instance.Distance[tail, toTail] < instance.Distance[head, toHead]
-      ? new EndpointMove(path, toTail, true)
-      : new EndpointMove(path, toHead, false);
+    var tailGain = CalculateGain(instance, tail, toTail);
+    var headGain = CalculateGain(instance, head, toHead);
+
+    return tailGain < headGain
+      ? new EndpointMove(path, toTail, true, tailGain)
+      : new EndpointMove(path, toHead, false, headGain);
   }
 
-
-  private EndpointMove(NodeList to, Node node, bool toStart) {
-    _to = to;
-    Node = node;
-    ToStart = toStart;
-  }
-
-  public readonly Node Node;
-  public readonly bool ToStart;
-  private readonly NodeList _to;
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static int CalculateGain(Instance instance, Node from, Node to) => -instance.Distance[from, to];
 }

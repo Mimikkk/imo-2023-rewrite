@@ -4,7 +4,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed record WeightedRegretExpansionMove(NodeList To, Node Node, int At) : IMove {
+public sealed record WeightedRegretExpansionMove(NodeList To, Node Node, int At, int Gain) : IMove {
   public void Apply() => Apply(To, Node, At);
   public static void Apply(NodeList to, Node node, int at) => InsertMove.Apply(to, node, at);
 
@@ -26,5 +26,5 @@ public sealed record WeightedRegretExpansionMove(NodeList To, Node Node, int At)
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   private static WeightedRegretExpansionMove From(NodeList cycle, (Node node, int at, int gain) candidate) =>
-    new(cycle, candidate.node, candidate.at);
+    new(cycle, candidate.node, candidate.at, candidate.gain);
 }

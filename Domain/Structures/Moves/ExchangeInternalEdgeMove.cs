@@ -1,8 +1,9 @@
+using Domain.Structures.Instances;
 using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed record ExchangeInternalEdgeMove(NodeList Cycle, int From, int To) : IMove {
+public sealed record ExchangeInternalEdgeMove(NodeList Cycle, int From, int To, int Gain) : IMove {
   public void Apply() => Apply(Cycle, From, To);
 
   public static void Apply(NodeList cycle, int from, int to) {
@@ -21,9 +22,23 @@ public sealed record ExchangeInternalEdgeMove(NodeList Cycle, int From, int To) 
     cycle.Notify();
   }
 
-  public static IEnumerable<ExchangeInternalEdgeMove> Find(NodeList cycle) {
+  public static IEnumerable<ExchangeInternalEdgeMove> Find(Instance instance, NodeList cycle) {
     for (var i = 0; i < cycle.Count; ++i)
     for (var j = i + 1; j < cycle.Count; ++j)
-      yield return new(cycle, i, j);
+      yield return new(cycle, i, j, CalculateGain(instance, cycle, i, j));
+  }
+
+  public static int CalculateGain(Instance instance, NodeList cycle, int exchange, int with) {
+    var D = instance.Distance;
+    var i = exchange;
+    var j = with;
+
+    if (i > j) (i, j) = (j, i);
+
+    var (a, b, c, d) = i == 0 && j == cycle.Count - 1
+      ? (cycle[i], cycle[cycle.Next(i)], cycle[cycle.Previous(j)], cycle[j])
+      : (cycle[cycle.Previous(i)], cycle[i], cycle[j], cycle[cycle.Next(j)]);
+
+    return D[a, b] + D[c, d] - D[a, c] - D[b, d];
   }
 }

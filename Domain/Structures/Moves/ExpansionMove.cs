@@ -4,7 +4,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed record ExpansionMove(NodeList To, Node Node, int At) : IMove {
+public sealed record ExpansionMove(NodeList To, Node Node, int At, int Gain) : IMove {
   public void Apply() => Apply(To, Node, At);
   public static void Apply(NodeList to, Node node, int at) => InsertMove.Apply(to, node, at);
 
@@ -19,5 +19,8 @@ public sealed record ExpansionMove(NodeList To, Node Node, int At) : IMove {
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   private static ExpansionMove From(NodeList cycle, (Node node, int at, int gain) candidate) =>
-    new(cycle, candidate.node, candidate.at);
+    new(cycle, candidate.node, candidate.at, candidate.gain);
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static int CalculateGain(Instance instance, (Node a, Node b) at, Node node) => instance.Gain.Insert(at, node);
 }

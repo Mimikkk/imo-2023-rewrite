@@ -10,7 +10,7 @@ using Domain.Structures.Moves;
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
 var instance = Instance.Predefined.KroA100;
-var search = SearchType.CycleExpansion;
+var search = SearchType.GreedyLocal;
 Shared.Random = new(999);
 
 for (var i = 0; i < 100; i++) {
@@ -18,8 +18,8 @@ for (var i = 0; i < 100; i++) {
     Start = i,
     Regret = 2,
     Weight = 0.38f,
-    Initializers = new() { SearchType.WeightedRegretCycleExpansion },
-    Variant = "external-vertices"
+    Variant = "mixed",
+    Initializers = new() { SearchType.WeightedRegretCycleExpansion }
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

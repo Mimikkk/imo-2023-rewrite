@@ -11,21 +11,6 @@ public sealed partial class Instance {
       D[(edge.a, node, edge.b)] - D[edge];
 
 
-    public int ExchangeEdge(NodeList cycle, int exchange, int with) {
-      var i = exchange;
-      var j = with;
-
-      if (i > j) (i, j) = (j, i);
-
-      var (a, b, c, d) = i == 0 && j == cycle.Count - 1
-        ? (cycle[i], cycle[cycle.Next(i)], cycle[cycle.Previous(j)], cycle[j])
-        : (cycle[cycle.Previous(i)], cycle[i], cycle[j], cycle[cycle.Next(j)]);
-
-      return D[a, b] + D[c, d] - D[a, c] - D[b, d];
-    }
-
-    public int ExchangeVertices(NodeList first, NodeList second, int exchange, int with) =>
-      ReplaceVertex(first, exchange, second[with]) + ReplaceVertex(second, with, first[exchange]);
 
     public int ExchangeVertices(NodeList cycle, int i, int j) {
       if (i > j) (i, j) = (j, i);
@@ -40,12 +25,6 @@ public sealed partial class Instance {
         return D[b, c] + D[d, e] - D[e, c] - D[d, b];
 
       return D[(a, b, c)] + D[(d, e, f)] - D[(a, e, c)] - D[(d, b, f)];
-    }
-
-    public int ReplaceVertex(NodeList cycle, int i, Node b) {
-      var va = cycle.NeighNodes(i);
-
-      return D[va] - D[va with { b = b }];
     }
 
     private readonly Distances D;

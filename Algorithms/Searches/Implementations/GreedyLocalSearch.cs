@@ -3,7 +3,6 @@ using Domain.Extensions;
 using Domain.Structures.Instances;
 using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
-using LanguageExt;
 
 namespace Algorithms.Searches.Implementations;
 
@@ -37,32 +36,28 @@ public class GreedyLocalSearch : Search {
 
   private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population,
     IList<Variant> moves) {
-
     while (true) {
-      var (move, gain) = moves.SelectMany(m => m.Find(instance, population))
+      var move = moves.SelectMany(m => m.Find(instance, population))
         .Shuffle()
-        .FirstOrDefault(c => c.gain > 0);
+        .FirstOrDefault(c => c.Gain > 0);
 
-      if (gain is 0) return population;
+      if (move is null) return population;
       move.Apply();
       population.ForEach(p => p.Notify());
     }
   }
 
-  public record Variant(Func<Instance, ImmutableArray<NodeList>, IEnumerable<(IMove move, int gain)>> Find) {
+  public record Variant(Func<Instance, ImmutableArray<NodeList>, IEnumerable<IMove>> Find) {
     public static readonly Variant InternalEdges = new(
-      (instance, population) => population.SelectMany(ExchangeInternalEdgeMove.Find)
-        .Select(m => (move: (IMove)m, gain: instance.Gain.ExchangeEdge(m.Cycle, m.From, m.To)))
+      (instance, population) => population.SelectMany(cycle => ExchangeInternalEdgeMove.Find(instance, cycle))
     );
 
     public static readonly Variant InternalVertices = new(
-      (instance, population) => population.SelectMany(ExchangeInternalVerticesMove.Find)
-        .Select(m => (move: (IMove)m, gain: instance.Gain.ExchangeVertices(m.Cycle, m.From, m.To)))
+      (instance, population) => population.SelectMany(cycle => ExchangeInternalVerticesMove.Find(instance, cycle))
     );
 
     public static readonly Variant ExternalVertices = new(
-      (instance, population) => ExchangeExternalVerticesMove.Find(population)
-        .Select(m => (move: (IMove)m, gain: instance.Gain.ExchangeVertices(m.First, m.Second, m.From, m.To)))
+      (instance, population) => ExchangeExternalVerticesMove.Find(instance, population)
     );
   }
 
