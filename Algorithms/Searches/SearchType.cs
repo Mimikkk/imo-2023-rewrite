@@ -10,4 +10,5 @@ public static class SearchType {
   public static readonly Search CycleExpansion = new CycleExpansionSearch();
   public static readonly Search RegretCycleExpansion = new RegretCycleExpansionSearch();
   public static readonly Search WeightedRegretCycleExpansion = new WeightedRegretCycleExpansionSearch();
+  public static readonly Search GreedyLocal = new GreedyLocalSearch();
 }

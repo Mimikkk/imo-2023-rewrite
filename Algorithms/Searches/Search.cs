@@ -6,7 +6,7 @@ public abstract class Search : Searchable {
   protected virtual void Initialize(Instance instance, Configuration configuration) {}
 
   protected sealed override void Configure(Instance instance, Configuration configuration) {
-    if (UsesInitializer && configuration.Initializers.Count == 0) throw new("No initializer was provided");
+    if (UsesInitializers && configuration.Initializers.Count == 0) throw new("No initializer was provided");
     if (UsesWeight && configuration.Weight is null) throw new("No weight was provided");
     if (UsesTimeLimit && configuration.TimeLimit is null) throw new("No time limit was provided");
     if (UsesIterationLimit && configuration.IterationLimit is null) throw new("No iteration limit was provided");
@@ -21,7 +21,7 @@ public abstract class Search : Searchable {
     bool usesRegret = false,
     bool usesVariants = false,
     bool usesTimeLimit = false,
-    bool usesInitializer = false,
+    bool usesInitializers = false,
     bool usesIterationLimit = false
   ) {
     DisplayAs = displayAs;
@@ -29,14 +29,14 @@ public abstract class Search : Searchable {
     UsesRegret = usesRegret;
     UsesVariants = usesVariants;
     UsesTimeLimit = usesTimeLimit;
-    UsesInitializer = usesInitializer;
+    UsesInitializers = usesInitializers;
     UsesIterationLimit = usesIterationLimit;
   }
 
   public readonly bool UsesWeight;
   public readonly bool UsesRegret;
   public readonly bool UsesVariants;
-  public readonly bool UsesInitializer;
+  public readonly bool UsesInitializers;
   public readonly bool UsesTimeLimit;
   public readonly bool UsesIterationLimit;
   public readonly DisplayType? DisplayAs;

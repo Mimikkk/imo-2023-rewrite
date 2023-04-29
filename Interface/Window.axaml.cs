@@ -132,7 +132,7 @@ public sealed partial class MainWindow : Window {
       ParameterWeightBox.IsVisible = I.Algorithm.UsesWeight;
       ParameterTimeLimitBox.IsVisible = I.Algorithm.UsesTimeLimit;
       ParameterIterationLimitBox.IsVisible = I.Algorithm.UsesIterationLimit;
-      ParameterInitializersBox.IsVisible = I.Algorithm.UsesInitializer;
+      ParameterInitializersBox.IsVisible = I.Algorithm.UsesInitializers;
       ParameterVariantsBox.IsVisible = I.Algorithm.UsesVariants;
       if (I.Algorithm.UsesVariants) {
         var size = I.Parameter.PopulationSize;
@@ -164,7 +164,7 @@ public sealed partial class MainWindow : Window {
       new("Rozszerzanie cyklu", SearchType.CycleExpansion),
       new("Rozszerzanie cyklu z k-żalem", SearchType.RegretCycleExpansion),
       new("Rozszerzanie cyklu z ważonym k-żalem", SearchType.WeightedRegretCycleExpansion),
-      // new("Zachłanne sąsiedztwo", Algorithm.GreedyLocal),
+      new("Zachłanne sąsiedztwo", SearchType.GreedyLocal),
       // new("Strome sąsiedztwo", Algorithm.SteepestLocal),
       // new("Strome sąsiedztwo z pamięcią", Algorithm.SteepestMemory),
       // new("Strome sąsiedztwo z listą kandydatów", Algorithm.SteepestCandidates),

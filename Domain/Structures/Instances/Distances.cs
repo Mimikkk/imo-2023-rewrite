@@ -4,7 +4,7 @@ namespace Domain.Structures.Instances;
 
 public sealed partial class Instance {
   public sealed record Distances {
-    public int this[int a, int b] => _distances[a, b];
+    private int this[int a, int b] => _distances[a, b];
     public int this[Node a, Node b] => _distances[a.Index, b.Index];
     public int this[(Node a, Node b) edge] => this[edge.a, edge.b];
     public int this[(Node a, Node b, Node c) vertex] => this[vertex.a, vertex.b] + this[vertex.b, vertex.c];
