@@ -6,7 +6,7 @@ public abstract class Search : Searchable {
   protected virtual void Initialize(Instance instance, Configuration configuration) {}
 
   protected sealed override void Configure(Instance instance, Configuration configuration) {
-    if (UsesInitializers && configuration.Initializers.Count == 0) throw new("No initializer was provided");
+    if (UsesInitializers && configuration.Initializers.Count is 0) throw new("No initializer was provided");
     if (UsesWeight && configuration.Weight is null) throw new("No weight was provided");
     if (UsesTimeLimit && configuration.TimeLimit is null) throw new("No time limit was provided");
     if (UsesIterationLimit && configuration.IterationLimit is null) throw new("No iteration limit was provided");
