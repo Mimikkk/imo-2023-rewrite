@@ -24,14 +24,19 @@ public class BenchmarkSearch {
     }
   }
 
-  private readonly Search _search = SearchType.Random;
+  private readonly Search _search = SearchType.WeightedRegretCycleExpansion;
   private Searchable.Configuration _configuration = null!;
 
   private int _iteration;
+  private const int IterationOffset = 26;
 
   [IterationSetup]
   public void Setup() {
-    _configuration = new(1, Instance.Dimension);
+    _configuration = new(2, Instance.Dimension) {
+      Start = _iteration < IterationOffset ? null : _iteration - IterationOffset,
+      Regret = 2,
+      Weight = 0.38f
+    };
     Shared.Random = new(_iteration++);
   }
 

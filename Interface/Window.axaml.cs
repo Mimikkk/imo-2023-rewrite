@@ -163,7 +163,7 @@ public sealed partial class MainWindow : Window {
       new("Najbliższy sąsiad", SearchType.NearestNeighbour),
       new("Rozszerzanie cyklu", SearchType.CycleExpansion),
       new("Rozszerzanie cyklu z k-żalem", SearchType.RegretCycleExpansion),
-      // new("Rozszerzanie cyklu z ważonym k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight),
+      new("Rozszerzanie cyklu z ważonym k-żalem", SearchType.WeightedRegretCycleExpansion),
       // new("Zachłanne sąsiedztwo", Algorithm.GreedyLocal),
       // new("Strome sąsiedztwo", Algorithm.SteepestLocal),
       // new("Strome sąsiedztwo z pamięcią", Algorithm.SteepestMemory),
@@ -179,7 +179,7 @@ public sealed partial class MainWindow : Window {
     ParameterInitializers.Items = new List<Option<Search>> {
       new("Brak", SearchType.Identity),
       new("Przypadkowe próbkowanie", SearchType.Random),
-      // new("Rozszerzanie z k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight)
+      new("Rozszerzanie z k-żalem", SearchType.WeightedRegretCycleExpansion)
     };
     ParameterInitializers.SelectedIndex = 0;
   }

@@ -34,7 +34,7 @@ internal sealed record InteractionModule(MainWindow Self) {
     public Search Initializer =>
       Self.ParameterInitializers.SelectedItem.As<Option<Search>>().Value;
 
-    public Searchable.Configuration Configuration => new(2, _instance!.Dimension) {
+    public Searchable.Configuration Configuration => new(PopulationSize, _instance!.Dimension) {
       Regret = Regret,
       Weight = Weight,
       TimeLimit = TimeLimit,
