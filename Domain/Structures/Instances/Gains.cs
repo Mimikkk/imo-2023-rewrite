@@ -23,8 +23,23 @@ public sealed partial class Instance {
       return D[a, b] + D[c, d] - D[a, c] - D[b, d];
     }
 
-    public int ExchangeVertex(NodeList first, NodeList second, int exchange, int with) =>
+    public int ExchangeVertices(NodeList first, NodeList second, int exchange, int with) =>
       ReplaceVertex(first, exchange, with) + ReplaceVertex(second, with, exchange);
+
+    public int ExchangeVertices(NodeList cycle, int i, int j) {
+      if (i > j) (i, j) = (j, i);
+
+      var (a, b, c) = cycle.NeighNodes(i);
+      var (d, e, f) = cycle.NeighNodes(j);
+
+      if (j - i == 1)
+        return D[a, b] + D[e, f] - D[a, e] - D[b, f];
+
+      if ((i, j) == (0, cycle.Count - 1))
+        return D[b, c] + D[d, e] - D[e, c] - D[d, b];
+
+      return D[(a, b, c)] + D[(d, e, f)] - D[(a, e, c)] - D[(d, b, f)];
+    }
 
     public int ReplaceVertex(NodeList cycle, int a, int b) {
       var va = cycle.NeighNodes(a);

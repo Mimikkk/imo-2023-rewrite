@@ -18,7 +18,7 @@ for (var i = 0; i < 100; i++) {
     Regret = 2,
     Weight = 0.38f,
     Initializers = new() { SearchType.WeightedRegretCycleExpansion },
-    Variant = "external-vertices"
+    Variant = "internal-vertices"
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));
