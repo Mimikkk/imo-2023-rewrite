@@ -10,9 +10,9 @@ namespace Cli.Benchmarks;
 
 [MemoryDiagnoser]
 [Config(typeof(Config))]
-[SimpleJob(iterationCount: Memory.Iterations, warmupCount: 24)]
+[SimpleJob(iterationCount: BenchmarkMemory.Iterations, warmupCount: 24)]
 [GcForce(false)]
-public class RandomSearchTest {
+public class BenchmarkSearch {
   public static readonly Instance Instance = Instance.Predefined.KroA100;
 
   private class Config : ManualConfig {
@@ -37,8 +37,8 @@ public class RandomSearchTest {
   }
 
   [Benchmark]
-  public void Test() => Memory.Results.Add(_search.Search(Instance, _configuration));
+  public void Test() => BenchmarkMemory.Results.Add(_search.Search(Instance, _configuration));
 
   [GlobalCleanup]
-  public void Cleanup() => Memory.Save();
+  public void Cleanup() => BenchmarkMemory.Save();
 }

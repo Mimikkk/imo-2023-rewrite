@@ -5,9 +5,9 @@ using BenchmarkDotNet.Running;
 namespace Cli.Benchmarks.Columns;
 
 public class DistanceColumn : IColumn {
-  public static readonly IColumn Min = new DistanceColumn("Min Distance", () => Memory.Load().min);
-  public static readonly IColumn Max = new DistanceColumn("Max Distance", () => Memory.Load().max);
-  public static readonly IColumn Average = new DistanceColumn("Average Distance", () => Memory.Load().average);
+  public static readonly IColumn Min = new DistanceColumn("Min Distance", () => BenchmarkMemory.Load().min);
+  public static readonly IColumn Max = new DistanceColumn("Max Distance", () => BenchmarkMemory.Load().max);
+  public static readonly IColumn Average = new DistanceColumn("Average Distance", () => BenchmarkMemory.Load().average);
 
   public string GetValue(Summary summary, BenchmarkCase benchmarkCase) =>
     GetValue(summary, benchmarkCase, SummaryStyle.Default);

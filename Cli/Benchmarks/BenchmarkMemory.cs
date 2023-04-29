@@ -5,13 +5,13 @@ using Domain.Structures.NodeLists;
 
 namespace Cli.Benchmarks;
 
-public static class Memory {
+public static class BenchmarkMemory {
   public static readonly Instance Instance = Instance.Predefined.KroA100;
   public static readonly List<ImmutableArray<NodeList>> Results = new();
   public const int Iterations = 100;
 
   public static void Save() {
-    var distances = Results.TakeLast(Iterations).Select(x => (double)RandomSearchTest.Instance.Distance[x]).ToList();
+    var distances = Results.TakeLast(Iterations).Select(x => (double)BenchmarkSearch.Instance.Distance[x]).ToList();
 
     var min = distances.Min();
     var max = distances.Max();
