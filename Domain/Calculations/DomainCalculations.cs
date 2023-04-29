@@ -12,7 +12,7 @@ public static class DomainCalculations {
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Regret(IList<int> values, int k) {
-    var regret = Math.Min(k, values.Count) * values[0];
+    var regret = Math.Min(k - 1, values.Count - 1) * values[0];
     for (var i = 1; i < k && i < values.Count; i++) regret -= values[i];
     return regret;
   }

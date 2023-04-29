@@ -11,7 +11,6 @@ namespace Cli.Benchmarks;
 [MemoryDiagnoser]
 [Config(typeof(Config))]
 [SimpleJob(iterationCount: BenchmarkMemory.Iterations, warmupCount: 24)]
-[GcForce(false)]
 public class BenchmarkSearch {
   public static readonly Instance Instance = Instance.Predefined.KroA100;
 
