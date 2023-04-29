@@ -11,8 +11,7 @@ public abstract class Searchable {
     return Call(instance, configuration);
   }
 
-  protected virtual void Configure(Instance instance, Configuration configuration) {
-  }
+  protected abstract void Configure(Instance instance, Configuration configuration);
 
   protected abstract ImmutableArray<NodeList> Call(Instance instance, Configuration configuration);
 
@@ -35,11 +34,11 @@ public abstract class Searchable {
     public ImmutableArray<NodeList> Population;
     public List<Callback> Initializers = new();
     public readonly List<int> Gains = new();
-    public int? Start = 0;
-    public int Regret = 0;
-    public float Weight = 0;
-    public float TimeLimit = 0;
-    public int IterationLimit = 0;
+    public int? Start = null;
+    public int? Regret = null;
+    public float? Weight = null;
+    public float? TimeLimit = null;
+    public int? IterationLimit = null;
     public string? Variant = null;
   }
 }

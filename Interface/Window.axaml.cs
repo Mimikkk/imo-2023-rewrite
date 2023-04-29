@@ -162,7 +162,7 @@ public sealed partial class MainWindow : Window {
     Algorithms.Items = new List<Option<Search>> {
       new("Najbliższy sąsiad", SearchType.NearestNeighbour),
       new("Rozszerzanie cyklu", SearchType.CycleExpansion),
-      // new("Rozszerzanie cyklu z k-żalem", Algorithm.CycleExpansionWithKRegret),
+      new("Rozszerzanie cyklu z k-żalem", SearchType.RegretCycleExpansion),
       // new("Rozszerzanie cyklu z ważonym k-żalem", Algorithm.CycleExpansionWithKRegretAndWeight),
       // new("Zachłanne sąsiedztwo", Algorithm.GreedyLocal),
       // new("Strome sąsiedztwo", Algorithm.SteepestLocal),

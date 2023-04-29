@@ -3,11 +3,11 @@ using Domain.Shareable;
 using Domain.Structures.Instances;
 
 var instance = Instance.Predefined.KroA100;
-var search = SearchType.CycleExpansion;
+var search = SearchType.RegretCycleExpansion;
 Shared.Random = new(0);
 
 var configuration = new Searchable.Configuration(1, instance.Dimension)
-  { Start = 0 };
+  { Start = 0, Regret = 5 };
 
 
 var start = DateTime.Now;

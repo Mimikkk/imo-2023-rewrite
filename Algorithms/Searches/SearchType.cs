@@ -8,4 +8,5 @@ public static class SearchType {
   public static readonly Search NearestNeighbour = new NearestNeighbourSearch();
   public static readonly Search Random = new RandomSearch();
   public static readonly Search CycleExpansion = new CycleExpansionSearch();
+  public static readonly Search RegretCycleExpansion = new RegretCycleExpansionSearch();
 }

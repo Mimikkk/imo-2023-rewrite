@@ -6,7 +6,7 @@ using Domain.Structures.NodeLists;
 namespace Algorithms.Searches.Implementations;
 
 public class CycleExpansionSearch : Search {
-  protected override void Configure(Instance instance, Configuration configuration) =>
+  protected override void Initialize(Instance instance, Configuration configuration) =>
     configuration.Population = SearchType.Furthest.Search(instance, configuration);
 
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
@@ -19,7 +19,7 @@ public class CycleExpansionSearch : Search {
 
     var counter = instance.Dimension - usable.Count;
     while (true) {
-      foreach (var move in population.Select(path => CycleExpansionMove.Find(instance, path, usable))) {
+      foreach (var move in population.Select(path => ExpansionMove.Find(instance, path, usable))) {
         move.Apply();
         usable.Remove(move.Node);
         if (++counter == instance.Dimension) return population;

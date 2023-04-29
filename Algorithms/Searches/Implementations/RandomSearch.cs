@@ -31,4 +31,8 @@ public class RandomSearch : Search {
 
   public RandomSearch() : base(displayAs: DisplayType.Path) {
   }
+
+  protected override void Initialize(Instance instance, Configuration configuration) {
+    throw new NotImplementedException();
+  }
 }
