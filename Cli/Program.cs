@@ -13,7 +13,7 @@ var search = SearchType.GreedyLocal;
 Shared.Random = new(999);
 
 for (var i = 0; i < 100; i++) {
-  var configuration = new Searchable.Configuration(1, instance.Dimension) {
+  var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
     Regret = 2,
     Weight = 0.38f,
