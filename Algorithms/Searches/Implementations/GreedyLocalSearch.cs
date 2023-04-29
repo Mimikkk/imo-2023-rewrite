@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Domain.Extensions;
 using Domain.Structures.Instances;
 using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;
@@ -16,6 +17,7 @@ public class GreedyLocalSearch : Search {
       var (move, gain) =
         population.SelectMany(ExchangeInternalEdgeMove.Find)
           .Select(m => (move: m, gain: instance.Gain.ExchangeEdge(m.Cycle, m.From, m.To)))
+          .Shuffle()
           .FirstOrDefault(c => c.gain > 0);
 
       if (gain is 0) return population;
