@@ -8,11 +8,16 @@ namespace Algorithms.Searches.Implementations;
 
 public class GreedyLocalSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
-    configuration.Population.Length switch {
-      _ => Multiple(instance, configuration.Population)
+    configuration.Variant switch {
+      "internal-edges" => InternalEdges(instance, configuration.Population),
+      "internal-vertices" => InternalEdges(instance, configuration.Population),
+      "external-vertices" => ExternalVertices(instance, configuration.Population),
+      "vertices" => InternalEdges(instance, configuration.Population),
+      "internal-edges-external-vertices" => InternalEdges(instance, configuration.Population),
+      "mixed" => InternalEdges(instance, configuration.Population),
     };
 
-  private static ImmutableArray<NodeList> Multiple(Instance instance, ImmutableArray<NodeList> population) {
+  private static ImmutableArray<NodeList> InternalEdges(Instance instance, ImmutableArray<NodeList> population) {
     while (true) {
       var (move, gain) =
         population.SelectMany(ExchangeInternalEdgeMove.Find)
@@ -22,7 +27,19 @@ public class GreedyLocalSearch : Search {
 
       if (gain is 0) return population;
       move.Apply();
-      move.Cycle.Notify();
+    }
+  }
+
+  private static ImmutableArray<NodeList> ExternalVertices(Instance instance, ImmutableArray<NodeList> population) {
+    while (true) {
+      var (move, gain) =
+        ExchangeExternalVerticesMove.Find(population)
+          .Select(m => (move: m, gain: instance.Gain.ExchangeVertex(m.First, m.Second, m.From, m.To)))
+          .Shuffle()
+          .FirstOrDefault(c => c.gain > 0);
+
+      if (gain is 0) return population;
+      move.Apply();
     }
   }
 
@@ -30,7 +47,8 @@ public class GreedyLocalSearch : Search {
     displayAs: DisplayType.Cycle,
     usesRegret: true,
     usesWeight: true,
-    usesInitializers: true
+    usesInitializers: true,
+    usesVariants: true
   ) {
   }
 }

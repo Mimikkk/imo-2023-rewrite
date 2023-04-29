@@ -17,6 +17,8 @@ public sealed record ExchangeInternalEdgeMove(NodeList Cycle, int From, int To) 
     for (var i = 0; i < elementCount / 2; ++i) {
       cycle.Swap((ia + cycle.Count + i) % cycle.Count, (ib + cycle.Count - i) % cycle.Count);
     }
+
+    cycle.Notify();
   }
 
   public static IEnumerable<ExchangeInternalEdgeMove> Find(NodeList cycle) {

@@ -15,12 +15,21 @@ public sealed partial class Instance {
       var j = with;
 
       if (i > j) (i, j) = (j, i);
-      
+
       var (a, b, c, d) = i == 0 && j == cycle.Count - 1
         ? (cycle[i], cycle[cycle.Next(i)], cycle[cycle.Previous(j)], cycle[j])
         : (cycle[cycle.Previous(i)], cycle[i], cycle[j], cycle[cycle.Next(j)]);
 
       return D[a, b] + D[c, d] - D[a, c] - D[b, d];
+    }
+
+    public int ExchangeVertex(NodeList first, NodeList second, int exchange, int with) =>
+      ReplaceVertex(first, exchange, with) + ReplaceVertex(second, with, exchange);
+
+    public int ReplaceVertex(NodeList cycle, int a, int b) {
+      var va = cycle.NeighNodes(a);
+
+      return D[va] - D[va with { b = cycle[b] }];
     }
 
     private readonly Distances D;

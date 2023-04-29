@@ -15,7 +15,8 @@ public sealed partial class NodeList {
   public int PreviousBy(int index, int offset = 0) => (index - offset - 1 + Count) % Count;
   public int Next(int index) => NextBy(index);
   public int Previous(int index) => PreviousBy(index);
-
+  public (int a, int b, int c) Neigh(int index) => (Previous(index), index, Next(index));
+  public (Node a, Node b, Node c) NeighNodes(int index) => (this[Previous(index)], this[index], this[Next(index)]);
 
   public void Notify() => Changed?.Invoke(this.ToArray(), EventArgs.Empty);
   public event EventHandler? Changed;
