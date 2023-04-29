@@ -5,16 +5,20 @@ using Domain.Structures.NodeLists;
 namespace Domain.Structures.Moves;
 
 public sealed record WeightedRegretExpansionMove(NodeList To, Node Node, int At, int Gain) : IMove {
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(To, Node, At);
+  
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static void Apply(NodeList to, Node node, int at) => InsertMove.Apply(to, node, at);
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static WeightedRegretExpansionMove Find(Instance instance, NodeList cycle, IEnumerable<Node> nodes, int regret,
     float weight) =>
     From(
       cycle,
-      nodes.Select(candidate =>
+      nodes.Select(node =>
         NodesCalculations.Edges(cycle)
-          .Select(edge => (node: candidate, at: edge.indices.j, gain: instance.Gain.Insert(edge.vertices, candidate)))
+          .Select(edge => (node, at: edge.indices.j, gain: ExpansionMove.CalculateGain(instance, edge.vertices, node)))
           .OrderBy(n => n.gain)
       ).MinBy(match => {
         var enumerable = match.ToArray();

@@ -4,6 +4,7 @@ using Domain.Structures.NodeLists;
 namespace Domain.Structures.Moves;
 
 public sealed record ExchangeExternalVerticesMove(NodeList First, NodeList Second, int From, int To, int Gain) : IMove {
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(First, Second, From, To);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

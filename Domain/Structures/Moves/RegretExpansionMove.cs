@@ -5,9 +5,13 @@ using Domain.Structures.NodeLists;
 namespace Domain.Structures.Moves;
 
 public sealed record RegretExpansionMove(NodeList To, Node Node, int At, int Gain) : IMove {
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(To, Node, At);
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static void Apply(NodeList to, Node node, int at) => InsertMove.Apply(to, node, at);
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static RegretExpansionMove Find(Instance instance, NodeList cycle, IEnumerable<Node> nodes, int regret) =>
     From(
       cycle,

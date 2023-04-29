@@ -4,13 +4,16 @@ using Domain.Structures.NodeLists;
 namespace Domain.Structures.Moves;
 
 public sealed record EndpointMove(NodeList To, Node Node, bool ToStart, int Gain) : IMove {
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(To, Node, ToStart);
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static void Apply(NodeList to, Node node, bool toStart) {
     if (toStart) InsertMove.Apply(to, node, 0);
     else AppendMove.Apply(to, node);
   }
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static EndpointMove
     Find(Instance instance, NodeList path, ISet<Node> used) {
     var tail = path.First();
