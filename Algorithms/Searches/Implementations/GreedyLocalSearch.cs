@@ -43,7 +43,6 @@ public class GreedyLocalSearch : Search {
 
       if (move is null) return population;
       move.Apply();
-      population.ForEach(p => p.Notify());
     }
   }
 

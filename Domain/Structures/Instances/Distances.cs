@@ -15,16 +15,22 @@ public sealed partial class Instance {
     public Node Furthest(Node node) => FurthestBy(node);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Node FurthestBy(Node node, int offset = 0) => I.Nodes[_furthest[node.Index, offset]];
+    public Node FurthestBy(Node node, int offset = 0) => I.Nodes[FurthestBy(node.Index, offset)];
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int FurthestBy(int node, int offset = 0) => _furthest[node, offset];
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Node Closest(Node node) => ClosestBy(node);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Node ClosestBy(Node node, int offset = 0) => I.Nodes[_furthest[node.Index, I.Dimension - 2 - offset]];
+    public Node ClosestBy(Node node, int offset = 0) => I.Nodes[ClosestBy(node.Index, offset)];
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public int ClosestBy(int node, int offset = 0) => _furthest[node, I.Dimension - 2 - offset];
 
     private readonly int[,] _distances;
-    private readonly int[,] _furthest;
+    public readonly int[,] _furthest;
 
     private int[,] PrecalculateDistances() {
       var distances = new int[I.Dimension, I.Dimension];

@@ -41,7 +41,6 @@ public class SteepestLocalSearch : Search {
       if (move.Gain <= 0) return population;
 
       move.Apply();
-      population.ForEach(p => p.Notify());
     }
   }
 

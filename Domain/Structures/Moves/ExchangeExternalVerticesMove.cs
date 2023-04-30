@@ -11,12 +11,8 @@ public sealed record ExchangeExternalVerticesMove(NodeList First, NodeList Secon
   public static void Apply(NodeList first, NodeList second, int from, int to) {
     var a = first.Pop(from);
     var b = second.Pop(to);
-
-    first.Insert(from, b);
-    second.Insert(to, a);
-
-    first.Notify();
-    second.Notify();
+    InsertMove.Apply(first, b, from);
+    InsertMove.Apply(second, a, to);
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

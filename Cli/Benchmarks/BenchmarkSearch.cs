@@ -24,7 +24,7 @@ public class BenchmarkSearch {
     }
   }
 
-  private readonly Search _search = SearchType.SteepestLocal;
+  private readonly Search _search = SearchType.CandidateLocal;
   private Searchable.Configuration _configuration = null!;
 
   private int _iteration;
@@ -39,7 +39,6 @@ public class BenchmarkSearch {
       Start = offset < 0 ? null : offset,
       Regret = 2,
       Weight = 0.38f,
-      Initializers = new() { SearchType.WeightedRegretCycleExpansion },
       Variant = "mixed"
     };
   }
