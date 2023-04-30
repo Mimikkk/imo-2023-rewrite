@@ -39,7 +39,7 @@ public class SteepestLocalSearch : Search {
     var i = 0;
     while (true) {
       if (i++ > 1000) return population;
-      var move = moves.SelectMany(m => m.Find(instance, population)).MaxBy(c => c.Gain);
+      var move = moves.SelectMany(m => m.Find(instance, population)).MaxBy(c => c.Gain)!;
       if (move.Gain <= 0) return population;
 
       move.Apply();
