@@ -36,9 +36,7 @@ public class SteepestLocalSearch : Search {
 
   private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population,
     IList<AvailableMove> moves) {
-    var i = 0;
     while (true) {
-      if (i++ > 1000) return population;
       var move = moves.SelectMany(m => m.Find(instance, population)).MaxBy(c => c.Gain)!;
       if (move.Gain <= 0) return population;
 
