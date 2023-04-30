@@ -10,7 +10,7 @@ using Domain.Structures.Moves;
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
 var instance = Instance.Predefined.KroA100;
-var search = SearchType.GreedyLocal;
+var search = SearchType.SteepestLocal;
 Shared.Random = new(999);
 
 for (var i = 0; i < 100; i++) {

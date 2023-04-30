@@ -6,7 +6,7 @@ using Domain.Structures.NodeLists;
 
 namespace Algorithms.Searches.Implementations;
 
-public class GreedyLocalSearch : Search {
+public class SteepestLocalSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
     configuration.Variant switch {
       "internal-edges" => Variants(instance, configuration.Population, new[] {
@@ -36,12 +36,12 @@ public class GreedyLocalSearch : Search {
 
   private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population,
     IList<AvailableMove> moves) {
+    var i = 0;
     while (true) {
-      var move = moves.SelectMany(m => m.Find(instance, population))
-        .Shuffle()
-        .FirstOrDefault(c => c.Gain > 0);
+      if (i++ > 1000) return population;
+      var move = moves.SelectMany(m => m.Find(instance, population)).MaxBy(c => c.Gain);
+      if (move.Gain <= 0) return population;
 
-      if (move is null) return population;
       move.Apply();
       population.ForEach(p => p.Notify());
     }
@@ -61,7 +61,7 @@ public class GreedyLocalSearch : Search {
     );
   }
 
-  public GreedyLocalSearch() : base(
+  public SteepestLocalSearch() : base(
     displayAs: DisplayType.Cycle,
     usesRegret: true,
     usesWeight: true,
