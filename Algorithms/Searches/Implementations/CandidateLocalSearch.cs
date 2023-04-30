@@ -10,9 +10,6 @@ namespace Algorithms.Searches.Implementations;
 
 public class CandidateLocalSearch : Search {
   protected override void Initialize(Instance instance, Configuration configuration) {
-    configuration.Regret = 2;
-    configuration.Weight = 0.38f;
-    configuration.Population = SearchType.WeightedRegretCycleExpansion.Search(instance, configuration);
   }
 
   private static IEnumerable<(Node a, Node b)> CreateCandidates(Instance instance,
@@ -54,14 +51,17 @@ public class CandidateLocalSearch : Search {
         }
       }
 
-      if (best!.Gain > 0) return population;
+      if (best!.Gain <= 0) return population;
       best.Apply();
     }
   }
 
 
   public CandidateLocalSearch() : base(
-    displayAs: DisplayType.Cycle
+    displayAs: DisplayType.Cycle,
+    usesInitializers: true,
+    usesRegret: true,
+    usesWeight: true
   ) {
   }
 }

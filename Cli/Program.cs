@@ -9,17 +9,17 @@ using Domain.Structures.Moves;
 // BenchmarkRunner.Run<BenchmarkSearch>();
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
-var instance = Instance.Predefined.KroA100;
+var instance = Instance.Predefined.KroA200;
 var search = SearchType.CandidateLocal;
 Shared.Random = new(999);
 
 for (var i = 0; i < 100; i++) {
   var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
-    // Regret = 2,
-    // Weight = 0.38f,
-    // Variant = "mixed",
-    // Initializers = new() { SearchType.WeightedRegretCycleExpansion }
+    Regret = 2,
+    Weight = 0.38f,
+    Variant = "mixed",
+    Initializers = new() { SearchType.WeightedRegretCycleExpansion }
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

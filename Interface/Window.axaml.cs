@@ -167,7 +167,7 @@ public sealed partial class MainWindow : Window {
       new("Zachłanne sąsiedztwo", SearchType.GreedyLocal),
       new("Strome sąsiedztwo", SearchType.SteepestLocal),
       // new("Strome sąsiedztwo z pamięcią", Algorithm.SteepestMemory),
-      // new("Strome sąsiedztwo z listą kandydatów", Algorithm.SteepestCandidates),
+      new("Strome sąsiedztwo z listą kandydatów", SearchType.CandidateLocal),
       new("Przypadkowe próbkowanie", SearchType.Random),
       // new("GRASP", Algorithm.RandomAdaptive)
     };
