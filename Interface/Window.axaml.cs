@@ -166,10 +166,9 @@ public sealed partial class MainWindow : Window {
       new("Rozszerzanie cyklu z ważonym k-żalem", SearchType.WeightedRegretCycleExpansion),
       new("Zachłanne sąsiedztwo", SearchType.GreedyLocal),
       new("Strome sąsiedztwo", SearchType.SteepestLocal),
-      // new("Strome sąsiedztwo z pamięcią", Algorithm.SteepestMemory),
+      new("Strome sąsiedztwo z pamięcią", SearchType.MemoryLocal),
       new("Strome sąsiedztwo z listą kandydatów", SearchType.CandidateLocal),
       new("Przypadkowe próbkowanie", SearchType.Random),
-      // new("GRASP", Algorithm.RandomAdaptive)
     };
     Algorithms.SelectedIndex = 0;
 
@@ -177,8 +176,8 @@ public sealed partial class MainWindow : Window {
     ParameterVariants.SelectedIndex = 0;
 
     ParameterInitializers.Items = new List<Option<Search>> {
-      new("Brak", SearchType.Identity),
       new("Przypadkowe próbkowanie", SearchType.Random),
+      new("Brak", SearchType.Identity),
       new("Rozszerzanie z k-żalem", SearchType.WeightedRegretCycleExpansion)
     };
     ParameterInitializers.SelectedIndex = 0;
