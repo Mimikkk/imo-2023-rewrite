@@ -9,26 +9,23 @@ using Domain.Structures.Instances;
 var instance = Instance.Predefined.KroA200;
 Shared.Random = new(999);
 
-// JIIT
-for (var i = 0; i < 10; i++) {
-  var search = SearchType.MultipleStartLocal;
-  var configuration = new Searchable.Configuration(2, instance.Dimension) {
-    Start = i,
-    IterationLimit = 2
-  };
-
-  search.Search(instance, configuration);
-}
+// JIT
+// for (var i = 0; i < 10; i++) {
+//   var search = SearchType.IteratedLocal;
+//   var configuration = new Searchable.Configuration(2, instance.Dimension) {
+//     Start = i,
+//     IterationLimit = 2
+//   };
+//
+//   search.Search(instance, configuration);
+// }
 
 for (var i = 0; i < 1; i++) {
   var search = SearchType.MultipleStartLocal;
   var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
-    IterationLimit = 10
-    // Regret = 2,
-    // Weight = 0.38f,
-    // Variant = "internal-edges",
-    // Initializers = new() { SearchType.Random }
+    TimeLimit = 10,
+    Variant = "small-perturbation",
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

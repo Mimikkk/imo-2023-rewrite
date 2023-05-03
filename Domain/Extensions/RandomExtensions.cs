@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Domain.Shareable;
+using LanguageExt;
 
 namespace Domain.Extensions;
 
@@ -16,4 +17,10 @@ public static class RandomExtensions {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> items) =>
     items.OrderBy(_ => Shared.Random.Next()).ToList();
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static IList<T> Shuffle<T>(this List<T> items) {
+    items.Sort((_, _) => Shared.Random.Next());
+    return items;
+  }
 }

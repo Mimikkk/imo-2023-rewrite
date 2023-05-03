@@ -31,6 +31,8 @@ public abstract class Searchable {
     public Configuration(int size, int dimension) {
       Population = Enumerable.Range(0, size).Select(_ => NodeList.Create(dimension)).ToImmutableArray();
     }
+    public Configuration() {
+    }
 
     public ImmutableArray<NodeList> Population;
     public List<(Callback, Configuration)> Initializers = new();
