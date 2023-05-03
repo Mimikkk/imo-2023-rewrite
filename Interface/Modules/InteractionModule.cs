@@ -39,7 +39,16 @@ internal sealed record InteractionModule(MainWindow Self) {
       Weight = Weight,
       TimeLimit = TimeLimit,
       IterationLimit = IterationLimit,
-      Initializers = new() { Initializer },
+      Initializers = new() {
+        (Initializer, new(PopulationSize, _instance.Dimension) {
+          Regret = Regret,
+          Weight = Weight,
+          TimeLimit = TimeLimit,
+          IterationLimit = IterationLimit,
+          Variant = Variant,
+          Start = StartIndex
+        })
+      },
       Variant = Variant,
       Start = StartIndex
     };
