@@ -6,35 +6,29 @@ using Domain.Structures.Instances;
 // BenchmarkRunner.Run<BenchmarkSearch>();
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
-var instance = Instance.Predefined.KroA100;
+var instance = Instance.Predefined.KroA200;
 Shared.Random = new(999);
 
-for (var i = 0; i < 1; i++) {
-  var search = SearchType.MemorableLocal;
+// JIIT
+for (var i = 0; i < 10; i++) {
+  var search = SearchType.MultipleStartLocal;
   var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
-    Regret = 2,
-    Weight = 0.38f,
-    Variant = "internal-edges",
-    Initializers = new() { SearchType.Random }
+    IterationLimit = 2
   };
 
-  var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));
-  Console.WriteLine($"Elapsed: {elapsed.TotalMilliseconds}[ms]");
-  Console.WriteLine($"Cycles: {instance.Distance[cycles]}");
-  if (instance.Distance[cycles] > 100000) {
-    Console.WriteLine("Something went wrong... too long.");
-    break;
-  }
+  search.Search(instance, configuration);
 }
+
 for (var i = 0; i < 1; i++) {
-  var search = SearchType.MemoryLocal;
+  var search = SearchType.MultipleStartLocal;
   var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
-    Regret = 2,
-    Weight = 0.38f,
-    Variant = "internal-edges",
-    Initializers = new() { SearchType.Random }
+    IterationLimit = 10
+    // Regret = 2,
+    // Weight = 0.38f,
+    // Variant = "internal-edges",
+    // Initializers = new() { SearchType.Random }
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

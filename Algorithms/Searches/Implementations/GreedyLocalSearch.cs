@@ -62,8 +62,6 @@ public class GreedyLocalSearch : Search {
 
   public GreedyLocalSearch() : base(
     displayAs: DisplayType.Cycle,
-    usesRegret: true,
-    usesWeight: true,
     usesInitializers: true,
     usesVariants: true
   ) {

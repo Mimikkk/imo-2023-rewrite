@@ -59,8 +59,6 @@ public class SteepestLocalSearch : Search {
 
   public SteepestLocalSearch() : base(
     displayAs: DisplayType.Cycle,
-    usesRegret: true,
-    usesWeight: true,
     usesInitializers: true,
     usesVariants: true
   ) {

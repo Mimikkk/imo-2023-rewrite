@@ -6,9 +6,7 @@ namespace Algorithms.Searches;
 
 public abstract class Searchable {
   public ImmutableArray<NodeList> Search(Instance instance, Configuration configuration) {
-    configuration = configuration with {
-      Population = configuration.Population.ToImmutableArray()
-    };
+    configuration = configuration with { Population = configuration.Population };
     Configure(instance, configuration);
     RunInitializers(instance, configuration);
     return Call(instance, configuration);
@@ -22,7 +20,7 @@ public abstract class Searchable {
     var initializers = configuration.Initializers.ToArray();
     configuration.Initializers.Clear();
 
-    foreach (var initializer in initializers) configuration.Population = initializer(instance, configuration);
+    foreach (var (initializer, _configuration) in initializers) configuration.Population = initializer(instance, _configuration);
   }
 
   public delegate ImmutableArray<NodeList> Callback(Instance instance, Configuration configuration);
@@ -35,7 +33,7 @@ public abstract class Searchable {
     }
 
     public ImmutableArray<NodeList> Population;
-    public List<Callback> Initializers = new();
+    public List<(Callback, Configuration)> Initializers = new();
     public readonly List<int> Gains = new();
     public int? Start = null;
     public int? Regret = null;

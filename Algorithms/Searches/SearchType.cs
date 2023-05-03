@@ -13,6 +13,5 @@ public static class SearchType {
   public static readonly Search GreedyLocal = new GreedyLocalSearch();
   public static readonly Search SteepestLocal = new SteepestLocalSearch();
   public static readonly Search CandidateLocal = new CandidateLocalSearch();
-  public static readonly Search MemoryLocal = new MemoryLocalSearch();
-  public static readonly Search MemorableLocal = new MemorableLocalSearch();
+  public static readonly Search MultipleStartLocal = new MultipleStartLocalSearch();
 }

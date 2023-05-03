@@ -7,8 +7,7 @@ using Domain.Structures.NodeLists;
 namespace Algorithms.Searches.Implementations;
 
 public class CandidateLocalSearch : Search {
-  protected override void Initialize(Instance instance, Configuration configuration) {
-  }
+  protected override void Initialize(Instance instance, Configuration configuration) { }
 
   private static IEnumerable<(Node a, Node b)> CreateCandidates(Instance instance,
     int size) =>
@@ -37,8 +36,7 @@ public class CandidateLocalSearch : Search {
           gain = ExchangeInternalEdgeMove.CalculateGain(instance, first, first.Previous(i), first.Previous(j));
           if (gain > best.Gain)
             best = new ExchangeInternalEdgeMove(first, first.Previous(i), first.Previous(j), gain);
-        }
-        else {
+        } else {
           ExchangeExternalVerticesMove.CalculateGain(instance, first, second, i, j);
           var gain = ExchangeExternalVerticesMove.CalculateGain(instance, first, second, first.Next(i), j);
           if (best is null || gain > best.Gain)
@@ -55,11 +53,9 @@ public class CandidateLocalSearch : Search {
   }
 
 
-  public CandidateLocalSearch() : base(
-    displayAs: DisplayType.Cycle,
-    usesInitializers: true,
-    usesRegret: true,
-    usesWeight: true
-  ) {
-  }
+  public CandidateLocalSearch()
+    : base(
+      displayAs: DisplayType.Cycle,
+      usesInitializers: true
+    ) { }
 }
