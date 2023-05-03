@@ -4,6 +4,9 @@ public sealed partial record Node(int Index, int X, int Y) {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public override int GetHashCode() => Index;
 
+  public bool Equals(Node? other) => other?.Index == Index;
+
+
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Deconstruct(out int x, out int y) {
     x = X;

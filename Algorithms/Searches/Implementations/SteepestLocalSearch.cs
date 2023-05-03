@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using Domain.Extensions;
 using Domain.Structures.Instances;
 using Domain.Structures.Moves;
 using Domain.Structures.NodeLists;

@@ -98,12 +98,12 @@ public sealed partial class MainWindow : Window {
     ParameterStartIndex.ValueChanged += (_, _) => {
       ParameterPopulationSize.Maximum = I.Parameter.StartIndex > I.Hull.Count()
         ? 2
-        : I.Hull.Count() - 1;
+        : I.Hull.Count - 1;
       ParameterPopulationSize.Value = Math.Min(ParameterPopulationSize.Maximum, ParameterPopulationSize.Value);
     };
     ParameterPopulationSize.ValueChanged += (_, _) => {
       ParameterStartIndex.Maximum = I.Parameter.PopulationSize > 2
-        ? I.Hull.Count() - 1
+        ? I.Hull.Count - 1
         : I.Instance.Dimension;
       ParameterStartIndex.Value = Math.Min(ParameterStartIndex.Maximum, ParameterStartIndex.Value);
 
@@ -166,7 +166,7 @@ public sealed partial class MainWindow : Window {
       new("Rozszerzanie cyklu z ważonym k-żalem", SearchType.WeightedRegretCycleExpansion),
       new("Zachłanne sąsiedztwo", SearchType.GreedyLocal),
       new("Strome sąsiedztwo", SearchType.SteepestLocal),
-      new("Strome sąsiedztwo z pamięcią", SearchType.MemoryLocal),
+      new("Strome sąsiedztwo z pamięcią", SearchType.MemorableLocal),
       new("Strome sąsiedztwo z listą kandydatów", SearchType.CandidateLocal),
       new("Przypadkowe próbkowanie", SearchType.Random),
     };
@@ -176,8 +176,8 @@ public sealed partial class MainWindow : Window {
     ParameterVariants.SelectedIndex = 0;
 
     ParameterInitializers.Items = new List<Option<Search>> {
-      new("Przypadkowe próbkowanie", SearchType.Random),
       new("Brak", SearchType.Identity),
+      new("Przypadkowe próbkowanie", SearchType.Random),
       new("Rozszerzanie z k-żalem", SearchType.WeightedRegretCycleExpansion)
     };
     ParameterInitializers.SelectedIndex = 0;

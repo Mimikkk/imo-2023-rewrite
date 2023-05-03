@@ -1,6 +1,4 @@
 using System.Collections.Immutable;
-using System.ComponentModel;
-using Domain.Extensions;
 using Domain.Structures;
 using Domain.Structures.Instances;
 using Domain.Structures.Moves;

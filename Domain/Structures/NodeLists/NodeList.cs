@@ -36,6 +36,13 @@ public sealed partial class NodeList {
   public (Node a, Node b, Node c) NeighNodes(int index) => (this[Previous(index)], this[index], this[Next(index)]);
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public (Node a, Node b, Node c) NeighNodes((int a, int b, int c) nodes) => (this[nodes.a], this[nodes.b], this[nodes.c]);
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public (int predecessor, int successor) NeighIndices(int index) => (this[Previous(index)].Index, this[Next(index)].Index);
+
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public Node Pop(int index) {
     var node = this[index];
     RemoveAt(index);
