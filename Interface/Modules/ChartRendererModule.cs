@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using Algorithms.Searches;
 using Charts.Extensions;
 using Domain.Extensions;
@@ -68,15 +69,13 @@ internal sealed record ChartRendererModule {
 
   private void Render(IEnumerable<Node> cycle) {
     switch (I.Algorithm.DisplayAs) {
-      case Search.DisplayType.Cycle: {
+      case Search.DisplayType.Cycle:
         Add.Cycle(cycle, I.Instance);
         return;
-      }
-      case Search.DisplayType.Path: {
+      case Search.DisplayType.Path:
         if (I.Step == (int)Self.HistorySlider.Maximum) Add.Cycle(cycle, I.Instance);
         else Add.Path(cycle, I.Instance);
         return;
-      }
     }
   }
 

@@ -52,5 +52,8 @@ public sealed partial class NodeList {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Notify() => Changed?.Invoke(this.ToArray(), EventArgs.Empty);
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public void Notify(NodeList cycle) => Changed?.Invoke(cycle.ToArray(), EventArgs.Empty);
+
   public event EventHandler? Changed;
 }

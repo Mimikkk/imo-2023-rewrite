@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Domain.Shareable;
-using LanguageExt;
 
 namespace Domain.Extensions;
 

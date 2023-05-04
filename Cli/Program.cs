@@ -21,11 +21,11 @@ Shared.Random = new(999);
 // }
 
 for (var i = 0; i < 1; i++) {
-  var search = SearchType.MultipleStartLocal;
+  var search = SearchType.IteratedLocal;
   var configuration = new Searchable.Configuration(2, instance.Dimension) {
     Start = i,
     TimeLimit = 10,
-    Variant = "small-perturbation",
+    Variant = "big-perturbation",
   };
 
   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

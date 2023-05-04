@@ -116,6 +116,8 @@ public sealed partial class MainWindow : Window {
           new("Wewnętrzna wymiana krawędzi", "internal-edges")
         },
         _ => new List<Option<string>> {
+          new("Małe perturbacja", "small-perturbation"),
+          new("Duże perturbacja", "big-perturbation"),
           new("Zewnętrzna wymiana wierzchołków", "external-vertices"),
           new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
           new("Wewnętrzna wymiana krawędzi", "internal-edges"),
@@ -143,6 +145,8 @@ public sealed partial class MainWindow : Window {
             new("Wewnętrzna wymiana krawędzi", "internal-edges")
           },
           _ => new List<Option<string>> {
+            new("Małe perturbacja", "small-perturbation"),
+            new("Duże perturbacja", "big-perturbation"),
             new("Zewnętrzna wymiana wierzchołków", "external-vertices"),
             new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
             new("Wewnętrzna wymiana krawędzi", "internal-edges"),
@@ -169,6 +173,8 @@ public sealed partial class MainWindow : Window {
       // new("Strome sąsiedztwo z pamięcią", SearchType.MemorableLocal),
       new("Strome sąsiedztwo z listą kandydatów", SearchType.CandidateLocal),
       new("Przypadkowe próbkowanie", SearchType.Random),
+      new("Wielostart przeszukiwanie lokalne", SearchType.MultipleStartLocal),
+      new("Iterowane przeszukiwanie lokalne", SearchType.IteratedLocal),
     };
     Algorithms.SelectedIndex = 0;
 
@@ -213,7 +219,13 @@ public sealed partial class MainWindow : Window {
         .ToImmutableArray(),
     };
     Shared.Random = new(configuration.Start ?? 999);
-    I.Algorithm.Search(I.Instance, configuration);
+
+    var cycles = I.Algorithm.Search(I.Instance, configuration);
+    histories.Zip(cycles)
+      .ForEach(pair => {
+        var (history, cycle) = pair;
+        history.Add(cycle.ToList());
+      });
 
     histories.ForEach(h => M.Histories.Add(h));
     HistorySlider.Maximum = histories.MaxBy(x => x.Count)!.Count - 1;
