@@ -41,23 +41,18 @@ public class GreedyLocalSearch : Search {
       useExternalVertices ? ExchangeExternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeExternalVerticesMove>();
     var externalVerticesMove = default(ExchangeExternalVerticesMove);
     while (true) {
-      var count = 0;
       if (useInternalEdges) {
         ExchangeInternalEdgeMove.Fill(instance, population, ref internalEdgesMoves);
         internalEdgeMove = internalEdgesMoves.FirstOrDefault(c => c.Gain > 0);
-        if (internalEdgeMove.Gain is not 0) count += 1;
       }
       if (useInternalVertices) {
         ExchangeInternalVerticesMove.Fill(instance, population, ref internalVerticesMoves);
         internalVerticesMove = internalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
-        if (internalVerticesMove.Gain is not 0) count += 1;
       }
       if (useExternalVertices) {
         ExchangeExternalVerticesMove.Fill(instance, population, ref externalVerticesMoves);
         externalVerticesMove = externalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
-        if (externalVerticesMove.Gain is not 0) count += 1;
       }
-      if (count is 0) return population;
 
       var moves = new List<Action>(3);
       if (internalEdgeMove.Gain is not 0) moves.Add(internalEdgeMove.Apply);
