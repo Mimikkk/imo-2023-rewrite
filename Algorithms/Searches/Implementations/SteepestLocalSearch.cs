@@ -28,9 +28,7 @@ public class SteepestLocalSearch : Search {
       if (internalVerticesMove.Gain > 0) moves.Add((internalVerticesMove.Apply, internalVerticesMove.Gain));
       if (externalVerticesMove.Gain > 0) moves.Add((externalVerticesMove.Apply, externalVerticesMove.Gain));
       if (moves.Count is 0) return population;
-
-      var move = moves.MaxBy(c => c.gain)!;
-      move.apply();
+      moves.MaxBy(c => c.gain)!.apply();
     }
   }
 
