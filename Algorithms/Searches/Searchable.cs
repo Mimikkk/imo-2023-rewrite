@@ -42,6 +42,6 @@ public abstract class Searchable {
     public float? Weight = null;
     public float? TimeLimit = null;
     public int? IterationLimit = null;
-    public string? Variant = null;
+    public int? Variant = null;
   }
 }

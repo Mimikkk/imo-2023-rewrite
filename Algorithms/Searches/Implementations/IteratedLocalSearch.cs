@@ -9,9 +9,9 @@ namespace Algorithms.Searches.Implementations;
 
 public class IteratedLocalSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
-    configuration.Variant switch {
-      "small-perturbation" => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value),
-      "big-perturbation"   => BigPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value)
+    (Variant)configuration.Variant!.Value switch {
+      Variant.SmallPerturbation => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value),
+      Variant.BigPerturbation   => BigPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value),
     };
 
   private static ImmutableArray<NodeList> SmallPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit) {
@@ -49,7 +49,7 @@ public class IteratedLocalSearch : Search {
     var start = DateTime.Now;
     while (DateTime.Now - start < ts) {
       var candidate = SearchType.SteepestLocal.Search(instance, CreateConfiguration(best) with {
-        Variant = "internal-edges-external-vertices"
+        Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices
       });
 
       if (instance.Distance[candidate] >= instance.Distance[best]) continue;
@@ -66,7 +66,7 @@ public class IteratedLocalSearch : Search {
       foreach (var perturbation in perturbations) perturbation.Apply();
 
       return new() {
-        Variant = "internal-edges-external-vertices",
+        Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices,
         Initializers = {
           (SearchType.WeightedRegretCycleExpansion, new() {
             Population = population,
@@ -99,6 +99,12 @@ public class IteratedLocalSearch : Search {
       usesTimeLimit: true,
       usesVariants: true
     ) { }
+
+  [Flags]
+  public enum Variant {
+    SmallPerturbation = 1,
+    BigPerturbation = 2
+  }
 
   private interface IPerturbation {
     public void Apply();

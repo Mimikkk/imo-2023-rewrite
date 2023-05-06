@@ -10,28 +10,16 @@ namespace Algorithms.Searches.Implementations;
 
 public class GreedyLocalSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
-    configuration.Variant switch {
-      "internal-edges" =>
-        Variants(instance, configuration.Population, AvailableVariant.InternalEdges),
-      "internal-vertices" =>
-        Variants(instance, configuration.Population, AvailableVariant.InternalVertices),
-      "external-vertices" =>
-        Variants(instance, configuration.Population, AvailableVariant.ExternalVertices),
-      "vertices" when configuration.Population.Length > 1 =>
-        Variants(instance, configuration.Population, AvailableVariant.Vertices),
-      "internal-edges-external-vertices" when configuration.Population.Length > 1 =>
-        Variants(instance, configuration.Population, AvailableVariant.InternalEdgeExternalVertices),
-      "mixed" when configuration.Population.Length > 1 =>
-        Variants(instance, configuration.Population, AvailableVariant.Mixed),
-    };
+    Variants(instance, configuration.Population, (Variant)configuration.Variant!.Value);
 
-  private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population, AvailableVariant variants) {
-    var useInternalEdges = variants.HasFlag(AvailableVariant.InternalEdges);
-    var useInternalVertices = variants.HasFlag(AvailableVariant.InternalVertices);
-    var useExternalVertices = variants.HasFlag(AvailableVariant.ExternalVertices);
+  private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population, Variant variants) {
+    var useInternalEdges = variants.HasFlag(Variant.InternalEdges);
+    var useInternalVertices = variants.HasFlag(Variant.InternalVertices);
+    var useExternalVertices = variants.HasFlag(Variant.ExternalVertices);
 
-    var internalEdgesMoves = useInternalEdges ? ExchangeInternalEdgeMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalEdgeMove>();
-    var internalEdgeMove = default(ExchangeInternalEdgeMove);
+    var internalEdgesMoves =
+      useInternalEdges ? ExchangeInternalEdgeMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalEdgeMove>();
+    var internalEdgesMove = default(ExchangeInternalEdgeMove);
 
     var internalVerticesMoves =
       useInternalVertices ? ExchangeInternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalVerticesMove>();
@@ -43,7 +31,7 @@ public class GreedyLocalSearch : Search {
     while (true) {
       if (useInternalEdges) {
         ExchangeInternalEdgeMove.Fill(instance, population, ref internalEdgesMoves);
-        internalEdgeMove = internalEdgesMoves.FirstOrDefault(c => c.Gain > 0);
+        internalEdgesMove = internalEdgesMoves.FirstOrDefault(c => c.Gain > 0);
       }
       if (useInternalVertices) {
         ExchangeInternalVerticesMove.Fill(instance, population, ref internalVerticesMoves);
@@ -55,7 +43,7 @@ public class GreedyLocalSearch : Search {
       }
 
       var moves = new List<Action>(3);
-      if (internalEdgeMove.Gain is not 0) moves.Add(internalEdgeMove.Apply);
+      if (internalEdgesMove.Gain is not 0) moves.Add(internalEdgesMove.Apply);
       if (internalVerticesMove.Gain is not 0) moves.Add(internalVerticesMove.Apply);
       if (externalVerticesMove.Gain is not 0) moves.Add(externalVerticesMove.Apply);
       if (moves.Count is 0) return population;
@@ -66,7 +54,7 @@ public class GreedyLocalSearch : Search {
   }
 
   [Flags]
-  private enum AvailableVariant {
+  public enum Variant {
     InternalEdges = 1, InternalVertices = 2, ExternalVertices = 4,
     Mixed = InternalEdges | InternalVertices | ExternalVertices,
     InternalEdgeExternalVertices = InternalEdges | ExternalVertices,

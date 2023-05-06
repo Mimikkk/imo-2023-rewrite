@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Algorithms.Searches;
+using Algorithms.Searches.Implementations;
 using Charts.Extensions;
 using Domain.Extensions;
 using Domain.Shareable;
@@ -12,7 +13,7 @@ public static class BenchmarkMemory {
   public static readonly Instance Instance = Instance.Predefined.KroA100;
   public static Searchable.Configuration Configuration => new() {
     Initializers = { (SearchType.Random, new(2, Instance.Dimension)) },
-    Variant = "mixed",
+    Variant = (int?)SteepestLocalSearch.Variant.Mixed
   };
   public static Searchable Search => SearchType.GreedyLocal;
   public const int Iterations = 100;

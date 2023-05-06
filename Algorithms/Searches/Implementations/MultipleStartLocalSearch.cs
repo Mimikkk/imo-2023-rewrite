@@ -14,7 +14,7 @@ public class MultipleStartLocalSearch : Search {
     Enumerable.Range(0, iterations)
       .Select(_ => SearchType.SteepestLocal.Search(instance, new(population.Length, instance.Dimension) {
         Initializers = { (SearchType.Random, new(population.Length, instance.Dimension)) },
-        Variant = "internal-edges-external-vertices"
+        Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices
       }))
       .MinBy(x => instance.Distance[x]);
 
