@@ -10,15 +10,13 @@ using Domain.Structures.NodeLists;
 namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
-  public static readonly Instance Instance = Instance.Predefined.KroA100;
+  public static readonly Instance Instance = Instance.Predefined.KroA200;
   public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
     IterationLimit = 100,
-    Variant = (int?)SteepestLocalSearch.Variant.Mixed,
-    Initializers = { (SearchType.Random, new(2, Instance.Dimension)) }
   };
-  public static Searchable Search => SearchType.SteepestLocal;
-  public const string SearchName = nameof(SearchType.SteepestLocal);
-  public const int Iterations = 100;
+  public static Searchable Search => SearchType.MultipleStartLocal;
+  public const string SearchName = nameof(SearchType.MultipleStartLocal);
+  public const int Iterations = 10;
 
   public static readonly List<ImmutableArray<NodeList>> Results = new();
 
