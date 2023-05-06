@@ -29,7 +29,7 @@ internal sealed record InteractionModule(MainWindow Self) {
     public float Weight => (float)Self.ParameterWeight.Value;
     public int IterationLimit => (int)Self.ParameterIterationLimit.Value;
     public float TimeLimit => (float)Self.ParameterTimeLimit.Value;
-    public string Variant => Self.ParameterVariants.SelectedItem.As<Option<string>>().Value;
+    public int? Variant => Self.ParameterVariants.SelectedItem.As<Option<int>>().Value;
 
     public Search Initializer =>
       Self.ParameterInitializers.SelectedItem.As<Option<Search>>().Value;

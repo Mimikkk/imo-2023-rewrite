@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Algorithms.Searches;
+using Algorithms.Searches.Implementations;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Domain.Shareable;
@@ -111,19 +112,19 @@ public sealed partial class MainWindow : Window {
       var size = I.Parameter.PopulationSize;
 
       ParameterVariants.Items = size switch {
-        1 => new List<Option<string>> {
-          new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
-          new("Wewnętrzna wymiana krawędzi", "internal-edges")
+        1 => new List<Option<int>> {
+          new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
+          new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
         },
-        _ => new List<Option<string>> {
-          new("Małe perturbacja", "small-perturbation"),
-          new("Duże perturbacja", "big-perturbation"),
-          new("Zewnętrzna wymiana wierzchołków", "external-vertices"),
-          new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
-          new("Wewnętrzna wymiana krawędzi", "internal-edges"),
-          new("Wymiana wierzchołków", "vertices"),
-          new("Zew. wym. wierzch. wraz z wew. wym. krawędzi", "external-vertices-internal-edges"),
-          new("Mieszany", "mixed")
+        _ => new List<Option<int>> {
+          new("Małe perturbacja", (int)IteratedLocalSearch.Variant.SmallPerturbation),
+          new("Duże perturbacja", (int)IteratedLocalSearch.Variant.BigPerturbation),
+          new("Zewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.ExternalVertices),
+          new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
+          new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
+          new("Wymiana wierzchołków", (int)SteepestLocalSearch.Variant.Vertices),
+          new("Zew. wym. wierzch. wraz z wew. wym. krawędzi", (int)SteepestLocalSearch.Variant.InternalEdgeExternalVertices),
+          new("Mieszany", (int)SteepestLocalSearch.Variant.Mixed),
         }
       };
       ParameterVariants.SelectedIndex = 0;
@@ -140,19 +141,19 @@ public sealed partial class MainWindow : Window {
         var size = I.Parameter.PopulationSize;
 
         ParameterVariants.Items = size switch {
-          1 => new List<Option<string>> {
-            new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
-            new("Wewnętrzna wymiana krawędzi", "internal-edges")
+          1 => new List<Option<int>> {
+            new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
+            new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
           },
-          _ => new List<Option<string>> {
-            new("Małe perturbacja", "small-perturbation"),
-            new("Duże perturbacja", "big-perturbation"),
-            new("Zewnętrzna wymiana wierzchołków", "external-vertices"),
-            new("Wewnętrzna wymiana wierzchołków", "internal-vertices"),
-            new("Wewnętrzna wymiana krawędzi", "internal-edges"),
-            new("Wymiana wierzchołków", "vertices"),
-            new("Zew. wym. wierzch. wraz z wew. wym. krawędzi", "external-vertices-internal-edges"),
-            new("Mieszany", "mixed")
+          _ => new List<Option<int>> {
+            new("Małe perturbacja", (int)IteratedLocalSearch.Variant.SmallPerturbation),
+            new("Duże perturbacja", (int)IteratedLocalSearch.Variant.BigPerturbation),
+            new("Zewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.ExternalVertices),
+            new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
+            new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
+            new("Wymiana wierzchołków", (int)SteepestLocalSearch.Variant.Vertices),
+            new("Zew. wym. wierzch. wraz z wew. wym. krawędzi", (int)SteepestLocalSearch.Variant.InternalEdgeExternalVertices),
+            new("Mieszany", (int)SteepestLocalSearch.Variant.Mixed),
           }
         };
         ParameterVariants.SelectedIndex = 0;
@@ -178,7 +179,7 @@ public sealed partial class MainWindow : Window {
     };
     Algorithms.SelectedIndex = 0;
 
-    ParameterVariants.Items = new List<Option<string>> { new("Domyślny", "default") };
+    ParameterVariants.Items = new List<Option<int>> { new("Domyślny", default) };
     ParameterVariants.SelectedIndex = 0;
 
     ParameterInitializers.Items = new List<Option<Search>> {
