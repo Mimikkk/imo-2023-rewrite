@@ -66,24 +66,21 @@ public class IteratedLocalSearch : Search {
       foreach (var perturbation in perturbations) perturbation.Apply();
 
       return new() {
-        Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices,
-        Initializers = {
-          (SearchType.WeightedRegretCycleExpansion, new() {
-            Population = population,
-            Regret = 2,
-            Weight = 0.38f,
-          })
-        }
+        Population = population,
+        Regret = 2,
+        Weight = 0.38f,
       };
     }
 
 
-    var best = SearchType.Random.Search(instance, new(population.Length, instance.Dimension));
+    var best = SearchType.SteepestLocal.Search(instance, new() {
+      Initializers = { (SearchType.Random, new() { Population = population }) }
+    });
     var ts = TimeSpan.FromSeconds(timelimit);
 
     var start = DateTime.Now;
     while (DateTime.Now - start < ts) {
-      var candidate = SearchType.SteepestLocal.Search(instance, CreateConfiguration(best));
+      var candidate = SearchType.WeightedRegretCycleExpansion.Search(instance, CreateConfiguration(best));
 
       if (instance.Distance[candidate] >= instance.Distance[best]) continue;
       best = candidate;

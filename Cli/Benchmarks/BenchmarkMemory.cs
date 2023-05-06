@@ -10,12 +10,14 @@ using Domain.Structures.NodeLists;
 namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
-  public static readonly Instance Instance = Instance.Predefined.KroA100;
-  public static Searchable.Configuration Configuration => new() {
-    Initializers = { (SearchType.Random, new(2, Instance.Dimension)) },
-    Variant = (int?)SteepestLocalSearch.Variant.Mixed
+  public static readonly Instance Instance = Instance.Predefined.KroB200;
+  public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
+    IterationLimit = 100,
+    Variant = (int?)SteepestLocalSearch.Variant.Mixed,
+    Initializers = { (SearchType.Random, new(2, Instance.Dimension)) }
   };
-  public static Searchable Search => SearchType.GreedyLocal;
+  public static Searchable Search => SearchType.SteepestLocal;
+  public const string SearchName = nameof(SearchType.SteepestLocal);
   public const int Iterations = 100;
 
   public static readonly List<ImmutableArray<NodeList>> Results = new();
@@ -31,13 +33,13 @@ public static class BenchmarkMemory {
     var plot = new ScottPlot.Plot();
     foreach (var cycle in best.cycles) plot.Add.Cycle(cycle, Instance);
     plot.Add.Label($"Łączna długość: {Instance.Distance[best.cycles]}");
-    plot.Save($"best-{Instance.Name}-cycles");
+    plot.Save($"best-{Instance.Name}-{SearchName}-cycles");
     plot.Clear();
 
-    foreach (var cycle in worst.cycles) plot.Add.Cycle(cycle, Instance);
-    plot.Add.Label($"Łączna długość: {Instance.Distance[worst.cycles]}");
-    plot.Save($"worst-{Instance.Name}-cycles");
-    plot.Clear();
+    // foreach (var cycle in worst.cycles) plot.Add.Cycle(cycle, Instance);
+    // plot.Add.Label($"Łączna długość: {Instance.Distance[worst.cycles]}");
+    // plot.Save($"worst-{Instance.Name}-{SearchName}-cycles");
+    // plot.Clear();
 
     Results.Clear();
   }
