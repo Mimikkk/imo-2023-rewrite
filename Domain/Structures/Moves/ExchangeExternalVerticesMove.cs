@@ -16,6 +16,11 @@ public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeL
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeExternalVerticesMove[] AssignSpace(Instance instance, IList<NodeList> cycles)
+    => new ExchangeExternalVerticesMove[cycles.Count * (cycles.Count - 1) * instance.Dimension * instance.Dimension];
+
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<ExchangeExternalVerticesMove> Find(Instance instance, IList<NodeList> cycles) {
     var size = 0;
     for (var i = 0; i < cycles.Count; ++i)
@@ -24,6 +29,13 @@ public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeL
     if (size is 0) return Enumerable.Empty<ExchangeExternalVerticesMove>();
 
     var moves = new ExchangeExternalVerticesMove[size];
+    Fill(instance, cycles, ref moves);
+
+    return moves;
+  }
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static void Fill(Instance instance, IList<NodeList> cycles, ref ExchangeExternalVerticesMove[] moves) {
     var k = -1;
 
     for (var i = 0; i < cycles.Count; ++i)
@@ -36,7 +48,6 @@ public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeL
         moves[++k] = new(first, second, m, n, CalculateGain(instance, first, second, m, n));
 
     }
-    return moves;
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

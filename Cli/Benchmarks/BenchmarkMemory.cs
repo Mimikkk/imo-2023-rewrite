@@ -12,7 +12,7 @@ public static class BenchmarkMemory {
   public static readonly Instance Instance = Instance.Predefined.KroA100;
   public static Searchable.Configuration Configuration => new() {
     Initializers = { (SearchType.Random, new(2, Instance.Dimension)) },
-    Variant = "external-vertices",
+    Variant = "mixed",
   };
   public static Searchable Search => SearchType.GreedyLocal;
   public const int Iterations = 100;

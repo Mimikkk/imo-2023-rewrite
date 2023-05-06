@@ -14,15 +14,33 @@ public readonly record struct ExchangeInternalVerticesMove(NodeList Cycle, int F
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeInternalVerticesMove[] AssignSpace(Instance instance, IList<NodeList> cycles)
+    => new ExchangeInternalVerticesMove[cycles.Count * instance.Dimension * (instance.Dimension - 1) / 2];
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<ExchangeInternalVerticesMove> Find(Instance instance, NodeList cycle) {
     var moves = new ExchangeInternalVerticesMove[cycle.Count * (cycle.Count - 1) / 2];
+    Fill(instance, cycle, ref moves);
+    return moves;
+  }
 
-    var k = -1;
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static void Fill(Instance instance, NodeList cycle, ref ExchangeInternalVerticesMove[] moves, int offset = 0) {
+    var k = offset - 1;
+
     for (var i = 0; i < cycle.Count; ++i)
     for (var j = i + 1; j < cycle.Count; ++j)
       moves[++k] = new(cycle, i, j, CalculateGain(instance, cycle, i, j));
+  }
 
-    return moves;
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static void Fill(Instance instance, IList<NodeList> cycles, ref ExchangeInternalVerticesMove[] moves) {
+
+    var offset = 0;
+    foreach (var cycle in cycles) {
+      Fill(instance, cycle, ref moves, offset);
+      offset += cycle.Count * (cycle.Count - 1) / 2;
+    }
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

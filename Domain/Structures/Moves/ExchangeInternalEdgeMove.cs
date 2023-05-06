@@ -25,16 +25,35 @@ public readonly record struct ExchangeInternalEdgeMove(NodeList Cycle, int From,
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeInternalEdgeMove[] AssignSpace(Instance instance, IList<NodeList> cycles)
+    => new ExchangeInternalEdgeMove[cycles.Count * instance.Dimension * (instance.Dimension - 1) / 2];
+
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<ExchangeInternalEdgeMove> Find(Instance instance, NodeList cycle) {
     var moves = new ExchangeInternalEdgeMove[cycle.Count * (cycle.Count - 1) / 2];
-    var k = -1;
+    Fill(instance, cycle, ref moves);
+    return moves;
+  }
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static void Fill(Instance instance, NodeList cycle, ref ExchangeInternalEdgeMove[] moves, int offset = 0) {
+    var k = offset - 1;
 
     for (var i = 0; i < cycle.Count; ++i)
     for (var j = i + 1; j < cycle.Count; ++j)
       moves[++k] = new(cycle, i, j, CalculateGain(instance, cycle, i, j));
-
-    return moves;
   }
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static void Fill(Instance instance, IList<NodeList> cycles, ref ExchangeInternalEdgeMove[] moves) {
+
+    var offset = 0;
+    foreach (var cycle in cycles) {
+      Fill(instance, cycle, ref moves, offset);
+      offset += cycle.Count * (cycle.Count - 1) / 2;
+    }
+  }
+
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int CalculateGain(Instance instance, NodeList cycle, int exchange, int with) {

@@ -26,39 +26,36 @@ public class GreedyLocalSearch : Search {
     };
 
   private static ImmutableArray<NodeList> Variants(Instance instance, ImmutableArray<NodeList> population, AvailableVariant variants) {
-    var useInternalVertices = variants.HasFlag(AvailableVariant.InternalVertices);
     var useInternalEdges = variants.HasFlag(AvailableVariant.InternalEdges);
+    var useInternalVertices = variants.HasFlag(AvailableVariant.InternalVertices);
     var useExternalVertices = variants.HasFlag(AvailableVariant.ExternalVertices);
 
-    ExchangeInternalEdgeMove? internalEdgeMove = null;
-    ExchangeInternalVerticesMove? internalVerticesMove = null;
-    ExchangeExternalVerticesMove? externalVerticesMove = null;
+    var internalEdgesMoves = useInternalEdges ? ExchangeInternalEdgeMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalEdgeMove>();
+    var internalEdgeMove = default(ExchangeInternalEdgeMove);
+
+    var internalVerticesMoves = useInternalVertices ? ExchangeInternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalVerticesMove>();
+    var internalVerticesMove = default(ExchangeInternalVerticesMove);
+
+    var externalVerticesMoves = useExternalVertices ? ExchangeExternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeExternalVerticesMove>();
+    var externalVerticesMove = default(ExchangeExternalVerticesMove);
     while (true) {
       if (useInternalEdges) {
-        internalEdgeMove = FindInternalEdges(instance, population)
-          .Shuffle()
-          .FirstOrDefault(c => c.Gain > 0);
-        if (internalEdgeMove.Value.Cycle is null) internalEdgeMove = null;
+        ExchangeInternalEdgeMove.Fill(instance, population, ref internalEdgesMoves);
+        internalEdgeMove = internalEdgesMoves.FirstOrDefault(c => c.Gain > 0);
       }
       if (useInternalVertices) {
-        internalVerticesMove = FindInternalVertices(instance, population)
-          .Shuffle()
-          .FirstOrDefault(c => c.Gain > 0);
-
-
-        if (internalVerticesMove.Value.Cycle is null) internalVerticesMove = null;
+        ExchangeInternalVerticesMove.Fill(instance, population, ref internalVerticesMoves);
+        internalVerticesMove = internalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
       }
       if (useExternalVertices) {
-        externalVerticesMove = FindExternalVertices(instance, population)
-          .Shuffle()
-          .FirstOrDefault(c => c.Gain > 0);
-        if (externalVerticesMove.Value.First is null) externalVerticesMove = null;
+        ExchangeExternalVerticesMove.Fill(instance, population, ref externalVerticesMoves);
+        externalVerticesMove = externalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
       }
 
       var moves = new List<Action>(3);
-      if (internalEdgeMove.HasValue) moves.Add(internalEdgeMove.Value.Apply);
-      if (internalVerticesMove.HasValue) moves.Add(internalVerticesMove.Value.Apply);
-      if (externalVerticesMove.HasValue) moves.Add(externalVerticesMove.Value.Apply);
+      if (internalEdgeMove.Gain is not 0) moves.Add(internalEdgeMove.Apply);
+      if (internalVerticesMove.Gain is not 0) moves.Add(internalVerticesMove.Apply);
+      if (externalVerticesMove.Gain is not 0) moves.Add(externalVerticesMove.Apply);
       if (moves.Count == 0) return population;
 
       var move = moves.Shuffle().First();
@@ -73,15 +70,6 @@ public class GreedyLocalSearch : Search {
     InternalEdgeExternalVertices = InternalEdges | ExternalVertices,
     Vertices = InternalVertices | ExternalVertices
   }
-
-  private static ExchangeInternalEdgeMove[] FindInternalEdges(Instance instance, ImmutableArray<NodeList> population) =>
-    population.SelectMany(cycle => ExchangeInternalEdgeMove.Find(instance, cycle)).ToArray();
-
-  private static ExchangeExternalVerticesMove[] FindExternalVertices(Instance instance, ImmutableArray<NodeList> population) =>
-    ExchangeExternalVerticesMove.Find(instance, population).ToArray();
-
-  private static ExchangeInternalVerticesMove[] FindInternalVertices(Instance instance, ImmutableArray<NodeList> population) =>
-    population.SelectMany(cycle => ExchangeInternalVerticesMove.Find(instance, cycle)).ToArray();
 
   public GreedyLocalSearch()
     : base(
