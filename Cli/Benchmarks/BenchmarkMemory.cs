@@ -10,7 +10,7 @@ using Domain.Structures.NodeLists;
 namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
-  public static readonly Instance Instance = Instance.Predefined.KroB200;
+  public static readonly Instance Instance = Instance.Predefined.KroA100;
   public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
     IterationLimit = 100,
     Variant = (int?)SteepestLocalSearch.Variant.Mixed,

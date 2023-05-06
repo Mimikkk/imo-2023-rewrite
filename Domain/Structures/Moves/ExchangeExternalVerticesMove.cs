@@ -84,7 +84,7 @@ public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeL
       }
     }
 
-    return default;
+    return best;
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
