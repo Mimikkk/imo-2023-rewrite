@@ -15,30 +15,13 @@ public class SteepestLocalSearch : Search {
     var useInternalVertices = variants.HasFlag(Variant.InternalVertices);
     var useExternalVertices = variants.HasFlag(Variant.ExternalVertices);
 
-    var internalEdgesMoves =
-      useInternalEdges ? ExchangeInternalEdgeMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalEdgeMove>();
     var internalEdgesMove = default(ExchangeInternalEdgeMove);
-
-    var internalVerticesMoves =
-      useInternalVertices ? ExchangeInternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalVerticesMove>();
     var internalVerticesMove = default(ExchangeInternalVerticesMove);
-
-    var externalVerticesMoves =
-      useExternalVertices ? ExchangeExternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeExternalVerticesMove>();
     var externalVerticesMove = default(ExchangeExternalVerticesMove);
     while (true) {
-      if (useInternalEdges) {
-        ExchangeInternalEdgeMove.Fill(instance, population, ref internalEdgesMoves);
-        internalEdgesMove = internalEdgesMoves.MaxBy(c => c.Gain)!;
-      }
-      if (useInternalVertices) {
-        ExchangeInternalVerticesMove.Fill(instance, population, ref internalVerticesMoves);
-        internalVerticesMove = internalVerticesMoves.MaxBy(c => c.Gain)!;
-      }
-      if (useExternalVertices) {
-        ExchangeExternalVerticesMove.Fill(instance, population, ref externalVerticesMoves);
-        externalVerticesMove = externalVerticesMoves.MaxBy(c => c.Gain)!;
-      }
+      if (useInternalEdges) internalEdgesMove = ExchangeInternalEdgeMove.BestByGain(instance, population);
+      if (useInternalVertices) internalVerticesMove = ExchangeInternalVerticesMove.BestByGain(instance, population);
+      if (useExternalVertices) externalVerticesMove = ExchangeExternalVerticesMove.BestByGain(instance, population);
 
       var moves = new List<(Action apply, int gain)>(3);
       if (internalEdgesMove.Gain > 0) moves.Add((internalEdgesMove.Apply, internalEdgesMove.Gain));

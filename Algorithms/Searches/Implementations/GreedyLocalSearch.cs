@@ -17,30 +17,13 @@ public class GreedyLocalSearch : Search {
     var useInternalVertices = variants.HasFlag(Variant.InternalVertices);
     var useExternalVertices = variants.HasFlag(Variant.ExternalVertices);
 
-    var internalEdgesMoves =
-      useInternalEdges ? ExchangeInternalEdgeMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalEdgeMove>();
     var internalEdgesMove = default(ExchangeInternalEdgeMove);
-
-    var internalVerticesMoves =
-      useInternalVertices ? ExchangeInternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeInternalVerticesMove>();
     var internalVerticesMove = default(ExchangeInternalVerticesMove);
-
-    var externalVerticesMoves =
-      useExternalVertices ? ExchangeExternalVerticesMove.AssignSpace(instance, population) : Array.Empty<ExchangeExternalVerticesMove>();
     var externalVerticesMove = default(ExchangeExternalVerticesMove);
     while (true) {
-      if (useInternalEdges) {
-        ExchangeInternalEdgeMove.Fill(instance, population, ref internalEdgesMoves);
-        internalEdgesMove = internalEdgesMoves.FirstOrDefault(c => c.Gain > 0);
-      }
-      if (useInternalVertices) {
-        ExchangeInternalVerticesMove.Fill(instance, population, ref internalVerticesMoves);
-        internalVerticesMove = internalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
-      }
-      if (useExternalVertices) {
-        ExchangeExternalVerticesMove.Fill(instance, population, ref externalVerticesMoves);
-        externalVerticesMove = externalVerticesMoves.FirstOrDefault(c => c.Gain > 0);
-      }
+      if (useInternalEdges) internalEdgesMove = ExchangeInternalEdgeMove.FirstWithGain(instance, population);
+      if (useInternalVertices) internalVerticesMove = ExchangeInternalVerticesMove.FirstWithGain(instance, population);
+      if (useExternalVertices) externalVerticesMove = ExchangeExternalVerticesMove.FirstWithGain(instance, population);
 
       var moves = new List<Action>(3);
       if (internalEdgesMove.Gain is not 0) moves.Add(internalEdgesMove.Apply);

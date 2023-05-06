@@ -50,11 +50,41 @@ public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeL
     }
   }
 
+
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
-  public static IEnumerable<ExchangeExternalVerticesMove> Find(Instance instance, NodeList a, NodeList b) {
-    for (var i = 0; i < a.Count; ++i)
-    for (var j = 0; j < b.Count; ++j)
-      yield return new(a, b, i, j, CalculateGain(instance, a, b, i, j));
+  public static ExchangeExternalVerticesMove FirstWithGain(Instance instance, IList<NodeList> cycles) {
+    for (var i = 0; i < cycles.Count; ++i)
+    for (var j = i + 1; j < cycles.Count; ++j) {
+      var first = cycles[i];
+      var second = cycles[j];
+
+      for (var m = 0; m < first.Count; ++m)
+      for (var n = 0; n < second.Count; ++n) {
+        var gain = CalculateGain(instance, first, second, m, n);
+        if (gain > 0) return new(first, second, m, n, gain);
+      }
+    }
+
+    return default;
+  }
+
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeExternalVerticesMove BestByGain(Instance instance, IList<NodeList> cycles) {
+    ExchangeExternalVerticesMove best = default;
+
+    for (var i = 0; i < cycles.Count; ++i)
+    for (var j = i + 1; j < cycles.Count; ++j) {
+      var first = cycles[i];
+      var second = cycles[j];
+
+      for (var m = 0; m < first.Count; ++m)
+      for (var n = 0; n < second.Count; ++n) {
+        var gain = CalculateGain(instance, first, second, m, n);
+        if (gain > best.Gain) best = new(first, second, m, n, gain);
+      }
+    }
+
+    return default;
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

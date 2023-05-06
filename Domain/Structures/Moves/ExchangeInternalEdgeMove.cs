@@ -54,6 +54,32 @@ public readonly record struct ExchangeInternalEdgeMove(NodeList Cycle, int From,
     }
   }
 
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeInternalEdgeMove FirstWithGain(Instance instance, IEnumerable<NodeList> cycles) {
+    foreach (var cycle in cycles.Shuffle()) {
+      for (var i = 0; i < cycle.Count; ++i)
+      for (var j = i + 1; j < cycle.Count; ++j) {
+        var gain = CalculateGain(instance, cycle, i, j);
+        if (gain > 0) return new(cycle, i, j, gain);
+      }
+    }
+
+    return default;
+  }
+  
+  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  public static ExchangeInternalEdgeMove BestByGain(Instance instance, IEnumerable<NodeList> cycles) {
+    ExchangeInternalEdgeMove best = default;
+    foreach (var cycle in cycles) {
+      for (var i = 0; i < cycle.Count; ++i)
+      for (var j = i + 1; j < cycle.Count; ++j) {
+        var gain = CalculateGain(instance, cycle, i, j);
+        if (gain > best.Gain) best = new(cycle, i, j, gain);
+      }
+    }
+
+    return best;
+  }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int CalculateGain(Instance instance, NodeList cycle, int exchange, int with) {
