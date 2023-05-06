@@ -10,7 +10,9 @@ public sealed partial class Instance {
     public int this[(Node a, Node b, Node c) vertex] => this[vertex.a, vertex.b] + this[vertex.b, vertex.c];
     public int this[IList<Node> cycle] => NodesCalculations.Edges(cycle).Sum(edge => this[edge.vertices]);
     public int this[IEnumerable<IList<Node>> cycles] => cycles.Sum(cycle => this[cycle]);
-
+    public int Calculate(IList<Node> cycle) => this[cycle];
+    public int Calculate(IEnumerable<IList<Node>> cycles) => this[cycles];
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Node Furthest(Node node) => FurthestBy(node);
 

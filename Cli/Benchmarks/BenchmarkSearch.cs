@@ -5,6 +5,7 @@ using BenchmarkDotNet.Configs;
 using Cli.Benchmarks.Columns;
 using Domain.Shareable;
 using Domain.Structures.Instances;
+using static Algorithms.Searches.Searchable;
 
 namespace Cli.Benchmarks;
 
@@ -12,7 +13,8 @@ namespace Cli.Benchmarks;
 [Config(typeof(Config))]
 [SimpleJob(iterationCount: BenchmarkMemory.Iterations, warmupCount: 24)]
 public class BenchmarkSearch {
-  public static readonly Instance Instance = Instance.Predefined.KroA100;
+  public static Instance Instance => BenchmarkMemory.Instance;
+  public static Configuration Configuration => BenchmarkMemory.Configuration;
 
   private class Config : ManualConfig {
     public Config() {
@@ -24,27 +26,21 @@ public class BenchmarkSearch {
     }
   }
 
-  private readonly Search _search = SearchType.CandidateLocal;
-  private Searchable.Configuration _configuration = null!;
+  private readonly Callback Search = SearchType.Random;
+  private Configuration _configuration = null!;
 
   private int _iteration;
-  private const int IterationOffset = 26;
+  private int IterationOffset => _iteration - 26;
+  private int Start => IterationOffset < 0 ? 0 : IterationOffset;
 
   [IterationSetup]
   public void Setup() {
-    var offset = _iteration - IterationOffset;
-
-    Shared.Random = new(_iteration++);
-    _configuration = new(2, Instance.Dimension) {
-      Start = offset < 0 ? null : offset,
-      Regret = 2,
-      Weight = 0.38f,
-      Variant = "mixed"
-    };
+    Shared.Random = new(++_iteration);
+    _configuration = Configuration with { Start = Start };
   }
 
   [Benchmark]
-  public void Test() => BenchmarkMemory.Results.Add(_search.Search(Instance, _configuration));
+  public void Test() => BenchmarkMemory.Results.Add(Search(Instance, _configuration));
 
   [GlobalCleanup]
   public void Cleanup() => BenchmarkMemory.Save();
