@@ -10,28 +10,38 @@ using Domain.Structures.NodeLists;
 namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
-  public static readonly Instance Instance = Instance.Predefined.KroA200;
+  public static readonly Instance Instance = Instance.Predefined.KroB200;
   public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
-    IterationLimit = 100,
+    Variant = Variant,
+    TimeLimit = 3.5f
   };
-  public static Searchable Search => SearchType.MultipleStartLocal;
-  public const string SearchName = nameof(SearchType.MultipleStartLocal);
+  public static Searchable Search => SearchType.IteratedLocal;
+  public const string SearchName = nameof(SearchType.IteratedLocal);
+  public static readonly int? Variant = (int?)IteratedLocalSearch.Variant.BigPerturbation;
+  public const string VariantName = nameof(IteratedLocalSearch.Variant.BigPerturbation);
+
   public const int Iterations = 10;
 
-  public static readonly List<ImmutableArray<NodeList>> Results = new();
+  public static readonly List<(ImmutableArray<NodeList> cycles, int iterations)> Results = new();
 
   public static void Save() {
-    var distances = Results.TakeLast(Iterations).Select(cycles => (cycles, distance: Instance.Distance[cycles])).ToArray();
-    var best = distances.MinBy(x => x.distance);
-    var worst = distances.MaxBy(x => x.distance);
-    var average = distances.Select(x => x.distance).Average();
+    var results = Results.TakeLast(Iterations).Select(result => (result.cycles, result.iterations, distance: Instance.Distance[result.cycles])).ToArray();
+    var best = results.MinBy(x => x.distance);
+    var worst = results.MaxBy(x => x.distance);
 
-    File.WriteAllText(Files.Distances.FullName, $"{best.distance}{Environment.NewLine}{worst.distance}{Environment.NewLine}{average}{Environment.NewLine}");
+    var averageDistance = results.Select(x => x.distance).Average();
+    File.WriteAllText(Files.Distances.FullName,
+      $"{best.distance}{Environment.NewLine}{worst.distance}{Environment.NewLine}{averageDistance}{Environment.NewLine}");
+
+    var averageIterations = results.Select(x => x.iterations).Average();
+    File.AppendAllText(Files.Distances.FullName,
+      $"{best.iterations}{Environment.NewLine}{worst.iterations}{Environment.NewLine}{averageIterations}{Environment.NewLine}"
+    );
 
     var plot = new ScottPlot.Plot();
     foreach (var cycle in best.cycles) plot.Add.Cycle(cycle, Instance);
     plot.Add.Label($"Łączna długość: {Instance.Distance[best.cycles]}");
-    plot.Save($"best-{Instance.Name}-{SearchName}-cycles");
+    plot.Save($"best-{Instance.Name}-{SearchName}-{VariantName}-cycles");
     plot.Clear();
 
     // foreach (var cycle in worst.cycles) plot.Add.Cycle(cycle, Instance);
@@ -42,11 +52,11 @@ public static class BenchmarkMemory {
     Results.Clear();
   }
 
-  public static (double min, double max, double average) LoadDistances() {
+  public static (double min, double max, double average) Load(int offset) {
     var lines = File.ReadAllLines(Files.Distances.FullName);
-    var best = double.Parse(lines[0]);
-    var worst = double.Parse(lines[1]);
-    var average = double.Parse(lines[2]);
+    var best = double.Parse(lines[offset]);
+    var worst = double.Parse(lines[offset + 1]);
+    var average = double.Parse(lines[offset + 2]);
 
     return (best, worst, average);
   }

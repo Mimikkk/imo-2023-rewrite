@@ -31,9 +31,9 @@ public abstract class Searchable {
     public Configuration(int size, int dimension) {
       Population = Enumerable.Range(0, size).Select(_ => NodeList.Create(dimension)).ToImmutableArray();
     }
-    public Configuration() {
-    }
+    public Configuration() { }
 
+    public Dictionary<string, int> Memo = new();
     public ImmutableArray<NodeList> Population;
     public List<(Callback, Configuration)> Initializers = new();
     public readonly List<int> Gains = new();

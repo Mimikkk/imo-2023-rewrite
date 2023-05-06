@@ -4,10 +4,10 @@ using BenchmarkDotNet.Running;
 
 namespace Cli.Benchmarks.Columns;
 
-public class DistanceColumn : IColumn {
-  public static readonly IColumn Min = new DistanceColumn("Min distance", () => BenchmarkMemory.Load(0).min);
-  public static readonly IColumn Max = new DistanceColumn("Max distance", () => BenchmarkMemory.Load(0).max);
-  public static readonly IColumn Average = new DistanceColumn("Average distance", () => BenchmarkMemory.Load(0).average);
+public class IterationColumn : IColumn {
+  public static readonly IColumn Min = new DistanceColumn("Min iterations", () => BenchmarkMemory.Load(3).min);
+  public static readonly IColumn Max = new DistanceColumn("Max iterations", () => BenchmarkMemory.Load(3).max);
+  public static readonly IColumn Average = new DistanceColumn("Average iterations", () => BenchmarkMemory.Load(3).average);
 
   public string GetValue(Summary summary, BenchmarkCase benchmarkCase) =>
     GetValue(summary, benchmarkCase, SummaryStyle.Default);
@@ -29,7 +29,7 @@ public class DistanceColumn : IColumn {
   public string Legend => $"{ColumnName} of all solutions";
   public readonly Func<double> Formatter;
 
-  public DistanceColumn(string name, Func<double> formatter) {
+  public IterationColumn(string name, Func<double> formatter) {
     ColumnName = name;
     Formatter = formatter;
   }

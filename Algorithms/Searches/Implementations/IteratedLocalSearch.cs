@@ -8,24 +8,28 @@ using Domain.Structures.NodeLists;
 namespace Algorithms.Searches.Implementations;
 
 public class IteratedLocalSearch : Search {
-  protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) =>
-    (Variant)configuration.Variant!.Value switch {
-      Variant.SmallPerturbation => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value),
-      Variant.BigPerturbation   => BigPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value),
+  protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) {
+    int iterations;
+    var result = (Variant)configuration.Variant!.Value switch {
+      Variant.SmallPerturbation => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value, out iterations),
+      Variant.BigPerturbation   => BigPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value, out iterations),
     };
+    configuration.Memo["iterations"] = iterations;
+    return result;
+  }
 
-  private static ImmutableArray<NodeList> SmallPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit) {
+  private static ImmutableArray<NodeList> SmallPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit, out int iterations) {
     IList<IPerturbation> CreatePerturbations(ImmutableArray<NodeList> cycles) {
       var perturbations = new List<IPerturbation>();
 
       foreach (var cycle in cycles) {
-        perturbations.Add(new InternalEdgePerturbation(cycle, 0.02f));
-        perturbations.Add(new InternalVerticesPerturbation(cycle, 0.02f));
+        perturbations.Add(new InternalEdgePerturbation(cycle, 0.05f));
+        perturbations.Add(new InternalVerticesPerturbation(cycle, 0.05f));
       }
 
       for (var i = 0; i < cycles.Length; ++i)
       for (var j = i + 1; j < cycles.Length; ++j)
-        perturbations.Add(new ExternalVerticesPerturbation(cycles[i], cycles[j], 0.02f));
+        perturbations.Add(new ExternalVerticesPerturbation(cycles[i], cycles[j], 0.05f));
 
       return perturbations;
     }
@@ -47,7 +51,10 @@ public class IteratedLocalSearch : Search {
     var ts = TimeSpan.FromSeconds(timelimit);
 
     var start = DateTime.Now;
+
+    iterations = 0;
     while (DateTime.Now - start < ts) {
+      ++iterations;
       var candidate = SearchType.SteepestLocal.Search(instance, CreateConfiguration(best) with {
         Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices
       });
@@ -59,7 +66,7 @@ public class IteratedLocalSearch : Search {
 
     return best;
   }
-  private static ImmutableArray<NodeList> BigPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit) {
+  private static ImmutableArray<NodeList> BigPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit, out int iterations) {
     Configuration CreateConfiguration(ImmutableArray<NodeList> population) {
       population = population.Select(x => x.Clone()).ToImmutableArray();
       var perturbations = population.Select(x => new DestructPerturbation(x, 0.2f)).ToArray();
@@ -74,18 +81,20 @@ public class IteratedLocalSearch : Search {
 
 
     var best = SearchType.SteepestLocal.Search(instance, new() {
-      Initializers = { (SearchType.Random, new() { Population = population }) }
+      Initializers = { (SearchType.Random, new() { Population = population }) },
+      Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices
     });
     var ts = TimeSpan.FromSeconds(timelimit);
+    iterations = 0;
 
     var start = DateTime.Now;
     while (DateTime.Now - start < ts) {
       var candidate = SearchType.WeightedRegretCycleExpansion.Search(instance, CreateConfiguration(best));
+      ++iterations;
 
       if (instance.Distance[candidate] >= instance.Distance[best]) continue;
       best = candidate;
     }
-
 
     return best;
   }

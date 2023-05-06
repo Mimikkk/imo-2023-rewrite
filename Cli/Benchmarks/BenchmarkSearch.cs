@@ -1,9 +1,7 @@
-﻿using Algorithms.Searches;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using Cli.Benchmarks.Columns;
-using Domain.Shareable;
 using Domain.Structures.Instances;
 using static Algorithms.Searches.Searchable;
 
@@ -16,27 +14,24 @@ public class BenchmarkSearch {
 
 
   [IterationSetup]
-  public void Setup() {
-    Shared.Random = new(++_iteration);
-    _configuration = Configuration;
-  }
+  public void Setup() => _configuration = Configuration;
 
   [Benchmark]
-  public void Test() => BenchmarkMemory.Results.Add(Search(Instance, _configuration));
+  public void Test() {
+    var cycles = Search(Instance, _configuration);
+    var iterations = _configuration.Memo["iterations"];
+
+    BenchmarkMemory.Results.Add((cycles, iterations));
+  }
 
   [GlobalCleanup]
   public void Cleanup() => BenchmarkMemory.Save();
-  
+
   private Configuration _configuration = null!;
   private static Instance Instance => BenchmarkMemory.Instance;
   private static Configuration Configuration => BenchmarkMemory.Configuration;
   private static Callback Search => BenchmarkMemory.Search;
-  
-  
-  private int _iteration;
-  private int IterationOffset => _iteration - 26;
-  private int Start => IterationOffset < 0 ? 0 : IterationOffset;
-  
+
   private class Config : ManualConfig {
     public Config() {
       AddColumn(StatisticColumn.Min);
@@ -44,6 +39,9 @@ public class BenchmarkSearch {
       AddColumn(DistanceColumn.Average);
       AddColumn(DistanceColumn.Min);
       AddColumn(DistanceColumn.Max);
+      AddColumn(IterationColumn.Average);
+      AddColumn(IterationColumn.Min);
+      AddColumn(IterationColumn.Max);
     }
   }
 }
