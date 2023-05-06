@@ -9,7 +9,7 @@ BenchmarkRunner.Run<BenchmarkSearch>();
 
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
-// var instance = Instance.Predefined.KroA200;
+// var instance = Instance.Predefined.KroA100;
 // Shared.Random = new(999);
 
 // JIT
@@ -23,12 +23,11 @@ BenchmarkRunner.Run<BenchmarkSearch>();
 //   search.Search(instance, configuration);
 // }
 //
-// for (var i = 0; i < 1; i++) {
-//   var search = SearchType.IteratedLocal;
-//   var configuration = new Searchable.Configuration(2, instance.Dimension) {
-//     Start = i,
-//     TimeLimit = 10,
-//     Variant = "big-perturbation",
+// for (var i = 0; i < 100; i++) {
+//   var search = SearchType.GreedyLocal;
+//   var configuration = new Searchable.Configuration {
+//     Initializers = { (SearchType.Random, new(2, instance.Dimension)) },
+//     Variant = "internal-edges",
 //   };
 //
 //   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));

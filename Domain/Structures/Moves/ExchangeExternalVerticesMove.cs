@@ -3,7 +3,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed record ExchangeExternalVerticesMove(NodeList First, NodeList Second, int From, int To, int Gain) : IMove {
+public readonly record struct ExchangeExternalVerticesMove(NodeList First, NodeList Second, int From, int To, int Gain) : IMove {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(First, Second, From, To);
 
@@ -17,14 +17,26 @@ public sealed record ExchangeExternalVerticesMove(NodeList First, NodeList Secon
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<ExchangeExternalVerticesMove> Find(Instance instance, IList<NodeList> cycles) {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    IEnumerable<IEnumerable<ExchangeExternalVerticesMove>> NestedEnumerable() {
-      for (var i = 0; i < cycles.Count; ++i)
-      for (var j = i + 1; j < cycles.Count; ++j)
-        yield return Find(instance, cycles[i], cycles[j]);
-    }
+    var size = 0;
+    for (var i = 0; i < cycles.Count; ++i)
+    for (var j = i + 1; j < cycles.Count; ++j)
+      size += cycles[i].Count * cycles[j].Count;
+    if (size is 0) return Enumerable.Empty<ExchangeExternalVerticesMove>();
 
-    return NestedEnumerable().Flatten();
+    var moves = new ExchangeExternalVerticesMove[size];
+    var k = -1;
+
+    for (var i = 0; i < cycles.Count; ++i)
+    for (var j = i + 1; j < cycles.Count; ++j) {
+      var first = cycles[i];
+      var second = cycles[j];
+
+      for (var m = 0; m < first.Count; ++m)
+      for (var n = 0; n < second.Count; ++n)
+        moves[++k] = new(first, second, m, n, CalculateGain(instance, first, second, m, n));
+
+    }
+    return moves;
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

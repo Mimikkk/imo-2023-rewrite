@@ -3,7 +3,7 @@ using Domain.Structures.NodeLists;
 
 namespace Domain.Structures.Moves;
 
-public sealed record ExchangeInternalVerticesMove(NodeList Cycle, int From, int To, int Gain) : IMove {
+public readonly record struct ExchangeInternalVerticesMove(NodeList Cycle, int From, int To, int Gain) : IMove {
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public void Apply() => Apply(Cycle, From, To);
 
@@ -15,9 +15,14 @@ public sealed record ExchangeInternalVerticesMove(NodeList Cycle, int From, int 
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<ExchangeInternalVerticesMove> Find(Instance instance, NodeList cycle) {
+    var moves = new ExchangeInternalVerticesMove[cycle.Count * (cycle.Count - 1) / 2];
+
+    var k = -1;
     for (var i = 0; i < cycle.Count; ++i)
     for (var j = i + 1; j < cycle.Count; ++j)
-      yield return new(cycle, i, j, CalculateGain(instance, cycle, i, j));
+      moves[++k] = new(cycle, i, j, CalculateGain(instance, cycle, i, j));
+
+    return moves;
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]

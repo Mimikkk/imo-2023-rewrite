@@ -15,7 +15,7 @@ public static class RandomExtensions {
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> items) =>
-    items.OrderBy(_ => Shared.Random.Next()).ToList();
+    items.OrderBy(_ => Shared.Random.Next()).ToArray();
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static IList<T> Shuffle<T>(this List<T> items) {

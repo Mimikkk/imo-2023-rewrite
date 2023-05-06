@@ -9,8 +9,12 @@ using Domain.Structures.NodeLists;
 namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
-  public static readonly Instance Instance = Instance.Predefined.KroA200;
-  public static Searchable.Configuration Configuration => new(2, Instance.Dimension) { };
+  public static readonly Instance Instance = Instance.Predefined.KroA100;
+  public static Searchable.Configuration Configuration => new() {
+    Initializers = { (SearchType.Random, new(2, Instance.Dimension)) },
+    Variant = "external-vertices",
+  };
+  public static Searchable Search => SearchType.GreedyLocal;
   public const int Iterations = 100;
 
   public static readonly List<ImmutableArray<NodeList>> Results = new();
