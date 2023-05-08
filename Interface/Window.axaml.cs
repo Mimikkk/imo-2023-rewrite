@@ -118,7 +118,8 @@ public sealed partial class MainWindow : Window {
         },
         _ => new List<Option<int>> {
           new("Małe perturbacja", (int)IteratedLocalSearch.Variant.SmallPerturbation),
-          new("Duże perturbacja", (int)IteratedLocalSearch.Variant.BigPerturbation),
+          new("Duża lokalna perturbacja", (int)IteratedLocalSearch.Variant.BigLocalPerturbation),
+          new("Duża konstrukcyjna perturbacja", (int)IteratedLocalSearch.Variant.BigConstructPerturbation),
           new("Zewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.ExternalVertices),
           new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
           new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
@@ -147,7 +148,8 @@ public sealed partial class MainWindow : Window {
           },
           _ => new List<Option<int>> {
             new("Małe perturbacja", (int)IteratedLocalSearch.Variant.SmallPerturbation),
-            new("Duże perturbacja", (int)IteratedLocalSearch.Variant.BigPerturbation),
+            new("Duża lokalna perturbacja", (int)IteratedLocalSearch.Variant.BigLocalPerturbation),
+            new("Duża konstrukcyjna perturbacja", (int)IteratedLocalSearch.Variant.BigConstructPerturbation),
             new("Zewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.ExternalVertices),
             new("Wewnętrzna wymiana wierzchołków", (int)SteepestLocalSearch.Variant.InternalVertices),
             new("Wewnętrzna wymiana krawędzi", (int)SteepestLocalSearch.Variant.InternalEdges),
