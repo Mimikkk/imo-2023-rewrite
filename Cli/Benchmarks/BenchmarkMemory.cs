@@ -11,21 +11,24 @@ namespace Cli.Benchmarks;
 
 public static class BenchmarkMemory {
   public static readonly Instance Instance = Instance.Predefined.KroB200;
+
   public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
     Variant = Variant,
     TimeLimit = 3.5f
   };
+
   public static Searchable Search => SearchType.IteratedLocal;
   public const string SearchName = nameof(SearchType.IteratedLocal);
-  public static readonly int? Variant = (int?)IteratedLocalSearch.Variant.BigPerturbation;
-  public const string VariantName = nameof(IteratedLocalSearch.Variant.BigPerturbation);
+  public static readonly int? Variant = (int?)IteratedLocalSearch.Variant.SmallPerturbation;
+  public const string VariantName = nameof(IteratedLocalSearch.Variant.SmallPerturbation);
 
-  public const int Iterations = 10;
+  public const int Iterations = 1;
 
   public static readonly List<(ImmutableArray<NodeList> cycles, int iterations)> Results = new();
 
   public static void Save() {
-    var results = Results.TakeLast(Iterations).Select(result => (result.cycles, result.iterations, distance: Instance.Distance[result.cycles])).ToArray();
+    var results = Results.TakeLast(Iterations)
+      .Select(result => (result.cycles, result.iterations, distance: Instance.Distance[result.cycles])).ToArray();
     var best = results.MinBy(x => x.distance);
     var worst = results.MaxBy(x => x.distance);
 
@@ -43,7 +46,6 @@ public static class BenchmarkMemory {
     plot.Add.Label($"Łączna długość: {Instance.Distance[best.cycles]}");
     plot.Save($"best-{Instance.Name}-{SearchName}-{VariantName}-cycles");
     plot.Clear();
-
     // foreach (var cycle in worst.cycles) plot.Add.Cycle(cycle, Instance);
     // plot.Add.Label($"Łączna długość: {Instance.Distance[worst.cycles]}");
     // plot.Save($"worst-{Instance.Name}-{SearchName}-cycles");

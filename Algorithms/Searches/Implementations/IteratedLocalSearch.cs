@@ -11,14 +11,19 @@ public class IteratedLocalSearch : Search {
   protected override ImmutableArray<NodeList> Call(Instance instance, Configuration configuration) {
     int iterations;
     var result = (Variant)configuration.Variant!.Value switch {
-      Variant.SmallPerturbation => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value, out iterations),
-      Variant.BigPerturbation   => BigPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value, out iterations),
+      Variant.SmallPerturbation => SmallPerturbation(instance, configuration.Population, configuration.TimeLimit!.Value,
+        out iterations),
+      Variant.BigLocalPerturbation => BigLocalPerturbation(instance, configuration.Population,
+        configuration.TimeLimit!.Value, out iterations),
+      Variant.BigConstructPerturbation => BigConstructPerturbation(instance, configuration.Population,
+        configuration.TimeLimit!.Value, out iterations),
     };
     configuration.Memo["iterations"] = iterations;
     return result;
   }
 
-  private static ImmutableArray<NodeList> SmallPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit, out int iterations) {
+  private static ImmutableArray<NodeList> SmallPerturbation(Instance instance, ImmutableArray<NodeList> population,
+    float timelimit, out int iterations) {
     IList<IPerturbation> CreatePerturbations(ImmutableArray<NodeList> cycles) {
       var perturbations = new List<IPerturbation>();
 
@@ -33,6 +38,7 @@ public class IteratedLocalSearch : Search {
 
       return perturbations;
     }
+
     ImmutableArray<NodeList> ApplyPerturbation(ImmutableArray<NodeList> population) {
       var valid = CreatePerturbations(population);
       var perturbations = valid.Where(_ => Shared.Random.NextDouble() < 0.15).ToArray();
@@ -40,6 +46,7 @@ public class IteratedLocalSearch : Search {
       foreach (var perturbation in perturbations) perturbation.Apply();
       return population;
     }
+
     Configuration CreateConfiguration(ImmutableArray<NodeList> population) => new() {
       Population = ApplyPerturbation(population.Select(x => x.Clone()).ToImmutableArray()),
       Regret = 2,
@@ -66,7 +73,9 @@ public class IteratedLocalSearch : Search {
 
     return best;
   }
-  private static ImmutableArray<NodeList> BigPerturbation(Instance instance, ImmutableArray<NodeList> population, float timelimit, out int iterations) {
+
+  private static ImmutableArray<NodeList> BigLocalPerturbation(Instance instance, ImmutableArray<NodeList> population,
+    float timelimit, out int iterations) {
     Configuration CreateConfiguration(ImmutableArray<NodeList> population) {
       population = population.Select(x => x.Clone()).ToImmutableArray();
       var perturbations = population.Select(x => new DestructPerturbation(x, 0.2f)).ToArray();
@@ -99,22 +108,65 @@ public class IteratedLocalSearch : Search {
     return best;
   }
 
+  private static ImmutableArray<NodeList> BigConstructPerturbation(Instance instance,
+    ImmutableArray<NodeList> population, float timelimit, out int iterations) {
+    Configuration CreateConfiguration(ImmutableArray<NodeList> population) {
+      population = population.Select(x => x.Clone()).ToImmutableArray();
+      var perturbations = population.Select(x => new DestructPerturbation(x, 0.2f)).ToArray();
+      foreach (var perturbation in perturbations) perturbation.Apply();
+
+      return new() {
+        Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices,
+        Initializers = {
+          (SearchType.WeightedRegretCycleExpansion, new() {
+            Population = population,
+            Regret = 2,
+            Weight = 0.38f,
+          })
+        }
+      };
+    }
+
+
+    var best = SearchType.SteepestLocal.Search(instance, new() {
+      Initializers = { (SearchType.Random, new() { Population = population }) },
+      Variant = (int?)SteepestLocalSearch.Variant.InternalEdgeExternalVertices
+    });
+    var ts = TimeSpan.FromSeconds(timelimit);
+    iterations = 0;
+
+    var start = DateTime.Now;
+    while (DateTime.Now - start < ts) {
+      var candidate = SearchType.SteepestLocal.Search(instance, CreateConfiguration(best));
+      ++iterations;
+
+      if (instance.Distance[candidate] >= instance.Distance[best]) continue;
+      best = candidate;
+    }
+
+    return best;
+  }
+
+
   public IteratedLocalSearch()
     : base(
       DisplayType.Cycle,
       usesTimeLimit: true,
       usesVariants: true
-    ) { }
+    ) {
+  }
 
   [Flags]
   public enum Variant {
-    SmallPerturbation = 1,
-    BigPerturbation = 2
+    SmallPerturbation,
+    BigLocalPerturbation,
+    BigConstructPerturbation,
   }
 
   private interface IPerturbation {
     public void Apply();
   }
+
   private sealed record DestructPerturbation(NodeList Cycle, float Weight) : IPerturbation {
     public void Apply() {
       for (var index = Cycle.Count - 1; index >= 0; --index) {
@@ -123,6 +175,7 @@ public class IteratedLocalSearch : Search {
       }
     }
   }
+
   private sealed record InternalEdgePerturbation(NodeList Cycle, float Weight) : IPerturbation {
     public void Apply() {
       for (var index = Cycle.Count - 1; index >= 0; index--) {
@@ -137,6 +190,7 @@ public class IteratedLocalSearch : Search {
       }
     }
   }
+
   private sealed record InternalVerticesPerturbation(NodeList Cycle, float Weight) : IPerturbation {
     public void Apply() {
       for (var index = Cycle.Count - 1; index >= 0; --index) {
@@ -150,6 +204,7 @@ public class IteratedLocalSearch : Search {
       }
     }
   }
+
   private sealed record ExternalVerticesPerturbation(NodeList First, NodeList Second, float Weight) : IPerturbation {
     public void Apply() {
       for (var index = First.Count - 1; index >= 0; --index) {
@@ -162,7 +217,6 @@ public class IteratedLocalSearch : Search {
           Shared.Random.Next(Second.Count)
         );
       }
-
     }
   }
 }

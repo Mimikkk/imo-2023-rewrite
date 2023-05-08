@@ -1,15 +1,21 @@
 ﻿using Algorithms.Searches;
 using BenchmarkDotNet.Running;
+using Charts.Extensions;
 using Cli.Benchmarks;
 using Domain.Methods;
 using Domain.Shareable;
 using Domain.Structures.Instances;
 
-BenchmarkRunner.Run<BenchmarkSearch>();
+// BenchmarkRunner.Run<BenchmarkSearch>();
+
+var instance = Instance.Predefined.KroA100;
+var result = SearchType.Random.Search(instance, new(2, instance.Dimension));
+
+var plot = new ScottPlot.Plot();
+foreach (var cycle in result) plot.Add.Cycle(cycle, instance);
 
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
 
-// var instance = Instance.Predefined.KroA100;
 // Shared.Random = new(999);
 
 // JIT
@@ -44,5 +50,7 @@ BenchmarkRunner.Run<BenchmarkSearch>();
 // | kroB-MSLS | 3.419 s | 0.0492 s | 0.0326 s | 3.371 s | 3.477 s | 39000.0000  |         36264.00 |     35556.00 |     36740.00 |                    |                |                |
 // | kroA-ILS1 | 3.510 s | 0.0074 s | 0.0049 s | 3.502 s | 3.519 s | 1000.0000   |         33728.10 |     32436.00 |     35052.00 |             188.40 |         193.00 |         196.00 |
 // | kroB-ILS1 | 3.511 s | 0.0110 s | 0.0073 s | 3.502 s | 3.520 s | 1000.0000   |         34350.30 |     33238.00 |     35282.00 |             191.60 |         195.00 |         188.00 |
-// | kroA-ILS2 | 3.555 s | 0.0156 s | 0.0081 s | 3.541 s | 3.566 s | 371000.0000 |         37035.70 |     35790.00 |     38526.00 |              60.70 |          59.00 |          62.00 |
-// | kroB-ILS2 | 3.567 s | 0.0261 s | 0.0173 s | 3.539 s | 3.591 s | 375000.0000 |         37036.00 |     35979.00 |     38633.00 |              61.40 |          61.00 |          63.00 |
+// | kroA-ILS2a | 3.555 s | 0.0156 s | 0.0081 s | 3.541 s | 3.566 s | 371000.0000 |         37035.70 |     35790.00 |     38526.00 |              60.70 |          59.00 |          62.00 |
+// | kroB-ILS2a | 3.567 s | 0.0261 s | 0.0173 s | 3.539 s | 3.591 s | 375000.0000 |         37036.00 |     35979.00 |     38633.00 |              61.40 |          61.00 |          63.00 |
+// | kroA-ILS2 |         33470,30 |     32456,00 |     34212,00 |              61,00 |          61,00 |          61,00 |
+// | kroB-ILS2 |         33846,20 |     33109,00 |     34759,00 |              56,50 |          57,00 |          56,00 |
