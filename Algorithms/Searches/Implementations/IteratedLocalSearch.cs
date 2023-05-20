@@ -15,7 +15,7 @@ public class IteratedLocalSearch : Search {
         out iterations),
       Variant.BigLocalPerturbation => BigLocalPerturbation(instance, configuration.Population,
         configuration.TimeLimit!.Value, out iterations),
-      Variant.BigConstructPerturbation => BigConstructPerturbation(instance, configuration.Population,
+      Variant.BigConstructPerturbation => BigConstructivePerturbation(instance, configuration.Population,
         configuration.TimeLimit!.Value, out iterations),
     };
     configuration.Memo["iterations"] = iterations;
@@ -74,7 +74,7 @@ public class IteratedLocalSearch : Search {
     return best;
   }
 
-  private static ImmutableArray<NodeList> BigLocalPerturbation(Instance instance, ImmutableArray<NodeList> population,
+  private static ImmutableArray<NodeList> BigConstructivePerturbation(Instance instance, ImmutableArray<NodeList> population,
     float timelimit, out int iterations) {
     Configuration CreateConfiguration(ImmutableArray<NodeList> population) {
       population = population.Select(x => x.Clone()).ToImmutableArray();
@@ -108,7 +108,7 @@ public class IteratedLocalSearch : Search {
     return best;
   }
 
-  private static ImmutableArray<NodeList> BigConstructPerturbation(Instance instance,
+  private static ImmutableArray<NodeList> BigLocalPerturbation(Instance instance,
     ImmutableArray<NodeList> population, float timelimit, out int iterations) {
     Configuration CreateConfiguration(ImmutableArray<NodeList> population) {
       population = population.Select(x => x.Clone()).ToImmutableArray();

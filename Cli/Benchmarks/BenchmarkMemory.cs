@@ -14,15 +14,15 @@ public static class BenchmarkMemory {
 
   public static Searchable.Configuration Configuration => new(2, Instance.Dimension) {
     Variant = Variant,
-    TimeLimit = 3.5f
+    TimeLimit = 8f
   };
 
-  public static Searchable Search => SearchType.IteratedLocal;
-  public const string SearchName = nameof(SearchType.IteratedLocal);
-  public static readonly int? Variant = (int?)IteratedLocalSearch.Variant.SmallPerturbation;
-  public const string VariantName = nameof(IteratedLocalSearch.Variant.SmallPerturbation);
+  public static Searchable Search => SearchType.Evolutionary;
+  public const string SearchName = nameof(SearchType.Evolutionary);
+  public static readonly int? Variant = (int?)EvolutionarySearch.Variant.Constructive;
+  public const string VariantName = nameof(EvolutionarySearch.Variant.Constructive);
 
-  public const int Iterations = 1;
+  public const int Iterations = 10;
 
   public static readonly List<(ImmutableArray<NodeList> cycles, int iterations)> Results = new();
 
@@ -46,10 +46,6 @@ public static class BenchmarkMemory {
     plot.Add.Label($"Łączna długość: {Instance.Distance[best.cycles]}");
     plot.Save($"best-{Instance.Name}-{SearchName}-{VariantName}-cycles");
     plot.Clear();
-    // foreach (var cycle in worst.cycles) plot.Add.Cycle(cycle, Instance);
-    // plot.Add.Label($"Łączna długość: {Instance.Distance[worst.cycles]}");
-    // plot.Save($"worst-{Instance.Name}-{SearchName}-cycles");
-    // plot.Clear();
 
     Results.Clear();
   }

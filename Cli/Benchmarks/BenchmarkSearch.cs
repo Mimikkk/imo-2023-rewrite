@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using Cli.Benchmarks.Columns;
+using Domain.Shareable;
 using Domain.Structures.Instances;
 using static Algorithms.Searches.Searchable;
 
@@ -14,7 +15,10 @@ public class BenchmarkSearch {
 
 
   [IterationSetup]
-  public void Setup() => _configuration = Configuration;
+  public void Setup() {
+    _configuration = Configuration;
+    Shared.Random = new(Guid.NewGuid().GetHashCode());
+  }
 
   [Benchmark]
   public void Test() {

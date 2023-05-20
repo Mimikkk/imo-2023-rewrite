@@ -7,9 +7,9 @@ using Domain.Methods;
 using Domain.Shareable;
 using Domain.Structures.Instances;
 
-// BenchmarkRunner.Run<BenchmarkSearch>();
+BenchmarkRunner.Run<BenchmarkSearch>();
 
-var instance = Instance.Predefined.KroA100;
+// var instance = Instance.Predefined.KroA100;
 
 
 // BenchmarkRunner.Run<BenchmarkDomainCalculations>();
@@ -27,21 +27,21 @@ var instance = Instance.Predefined.KroA100;
 //   search.Search(instance, configuration);
 // }
 //
-for (var i = 0; i < 1; i++) {
-  var search = SearchType.Evolutionary;
-  var configuration = new Searchable.Configuration(2, instance.Dimension) {
-    Variant = (int?)EvolutionarySearch.Variant.Local,
-    TimeLimit = 100f,
-  };
-
-  var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));
-  Console.WriteLine($"Elapsed: {elapsed.TotalMilliseconds}[ms]");
-  Console.WriteLine($"Cycles: {instance.Distance[cycles]}");
-  if (instance.Distance[cycles] > 100000) {
-    Console.WriteLine("Something went wrong... too long.");
-    break;
-  }
-}
+// for (var i = 0; i < 1; i++) {
+//   var search = SearchType.Evolutionary;
+//   var configuration = new Searchable.Configuration(2, instance.Dimension) {
+//     Variant = (int?)EvolutionarySearch.Variant.Local,
+//     TimeLimit = 100f,
+//   };
+//
+//   var (elapsed, cycles) = MeasurementMethods.Measure(() => search.Search(instance, configuration));
+//   Console.WriteLine($"Elapsed: {elapsed.TotalMilliseconds}[ms]");
+//   Console.WriteLine($"Cycles: {instance.Distance[cycles]}");
+//   if (instance.Distance[cycles] > 100000) {
+//     Console.WriteLine("Something went wrong... too long.");
+//     break;
+//   }
+// }
 // | Method    |    Mean |     Min |     Max | Average d |    Min d |    Max d | Avg i  | Min i  |  Max i  |
 // |---------- |--------:|--------:|--------:|----------:|---------:|---------:|-------:|-------:|--------:|
 // | kroA-MSLS | 3.565 s | 3.344 s | 3.383 s |  35901.10 | 35416.00 | 36656.00 |        |        |         |
@@ -52,3 +52,7 @@ for (var i = 0; i < 1; i++) {
 // | kroB-ILS2a | 3.567 s | 3.539 s | 3.591 s |  37036.00 | 35979.00 | 38633.00 |  61.40 |  61.00 |   63.00 |
 // | kroA-ILS2 |         33470,30 |     32456,00 |     34212,00 |              61,00 |          61,00 |          61,00 |
 // | kroB-ILS2 |         33846,20 |     33109,00 |     34759,00 |              56,50 |          57,00 |          56,00 |
+// | kroA-EVO-L |         33470,30 |     32456,00 |     34212,00 |              61,00 |          61,00 |          61,00 |
+// | kroB-EVO-L |         33846,20 |     33109,00 |     34759,00 |              56,50 |          57,00 |          56,00 |
+// | kroA-EVO-C |         33470,30 |     32456,00 |     34212,00 |              61,00 |          61,00 |          61,00 |
+// | kroB-EVO-C |         33846,20 |     33109,00 |     34759,00 |              56,50 |          57,00 |          56,00 |
